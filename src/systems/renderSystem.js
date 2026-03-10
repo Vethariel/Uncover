@@ -1,16 +1,47 @@
+import {
+  TILE_WALL,
+  TILE_DESTRUCTIBLE
+} from "../config/constants.js"
 export class RenderSystem {
 
-  draw(world, p) {
+    draw(world, p) {
 
-    for (const entity of world.entities) {
+        const grid = world.grid
+        const tileSize = world.tileSize
 
-      if (!entity.size) continue
+        p.stroke(60)
+        p.noFill()
 
-      p.fill(80, 200, 255)
-      p.rect(entity.x, entity.y, entity.size, entity.size)
+        for (let y = 0; y < grid.rows; y++) {
+            for (let x = 0; x < grid.cols; x++) {
+
+                const tile = grid.tiles[y][x]
+
+                const px = x * tileSize
+                const py = y * tileSize
+
+                if (tile === TILE_WALL) {
+                    p.fill(120)
+                    p.rect(px, py, tileSize, tileSize)
+                }
+
+                else if (tile === TILE_DESTRUCTIBLE) {
+                    p.fill(200, 150, 80)
+                    p.rect(px, py, tileSize, tileSize)
+                }
+
+            }
+        }
+
+        for (const entity of world.entities) {
+
+            if (!entity.size) continue
+
+            p.fill(80, 200, 255)
+            p.rect(entity.x, entity.y, entity.size, entity.size)
+
+        }
 
     }
-
-  }
 
 }

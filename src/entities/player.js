@@ -1,3 +1,5 @@
+import { PLAYER_SPEED, PLAYER_SIZE, DIR_NONE } from "../config/constants.js"
+
 export class Player {
 
   constructor(x, y) {
@@ -9,8 +11,10 @@ export class Player {
     this.vx = 0
     this.vy = 0
     
-    this.speed = 200
-    this.size = 30
+    this.speed = PLAYER_SPEED
+    this.size = PLAYER_SIZE
+
+    this.facing = DIR_NONE
 
   }
 

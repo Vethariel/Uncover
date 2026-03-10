@@ -1,16 +1,25 @@
+import {
+  DIR_UP,
+  DIR_DOWN,
+  DIR_LEFT,
+  DIR_RIGHT,
+  DIR_NONE
+} from "../config/constants.js"
+
 export class InputSystem {
 
   update(world, dt, p) {
 
     const player = world.player
 
-    player.vx = 0
-    player.vy = 0
+    let direction = DIR_NONE
 
-    if (p.keyIsDown('a')) player.vx = -player.speed   // A
-    if (p.keyIsDown('d')) player.vx = player.speed    // D
-    if (p.keyIsDown('w')) player.vy = -player.speed   // W
-    if (p.keyIsDown('s')) player.vy = player.speed    // S
+    if (p.keyIsDown('a')) direction = DIR_LEFT   // A
+    else if (p.keyIsDown('d')) direction = DIR_RIGHT    // D
+    else if (p.keyIsDown('w')) direction = DIR_UP   // W
+    else if (p.keyIsDown('s')) direction = DIR_DOWN    // S
+
+    player.facing = direction
 
   }
 
