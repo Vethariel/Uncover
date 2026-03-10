@@ -8,7 +8,7 @@ import {
 
 export class InputSystem {
 
-  update(world, dt, p) {
+  update(world, p) {
 
     const player = world.player
 
@@ -19,7 +19,8 @@ export class InputSystem {
     else if (p.keyIsDown('w')) direction = DIR_UP   // W
     else if (p.keyIsDown('s')) direction = DIR_DOWN    // S
 
-    player.facing = direction
+    player.facing = direction == DIR_NONE ? player.facing : direction
+    player.desiredFacing = direction
 
   }
 

@@ -1,10 +1,8 @@
-import { TILE_SIZE } from "../config/constants.js"
-
 export class World {
 
-  constructor() {
+  constructor(tileSize) {
 
-    this.tileSize = TILE_SIZE
+    this.tileSize = tileSize
 
     this.grid = null
 
