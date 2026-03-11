@@ -14,6 +14,21 @@ export class InputSystem {
 
     const player = world.player
 
+    if (player.alive) {
+
+      this.handlePlayerInput(world, player, p)
+
+    }
+
+    if (world.gameOver && p.keyIsDown('r')) {
+
+      world.reset()
+
+    }
+
+  }
+
+  handlePlayerInput(world, player, p) {
     let direction = DIR_NONE
 
     if (p.keyIsDown('a')) direction = DIR_LEFT   // A
@@ -27,7 +42,6 @@ export class InputSystem {
     if (p.keyIsDown(' ')) {
       this.tryPlaceBomb(world, player)
     }
-
   }
 
   tryPlaceBomb(world, player) {

@@ -8,6 +8,7 @@ import { InputSystem } from "../systems/inputSystem.js"
 import { CollisionSystem } from "../systems/collisionSystem.js"
 import { RenderSystem } from "../systems/renderSystem.js"
 import { BombSystem } from "../systems/bombSystem.js"
+import { LifeSystem } from "../systems/lifeSystem.js"
 
 import { DIR_DOWN, PLAYER_SIZE, PLAYER_SPEED, TILE_SIZE } from "../config/constants.js"
 
@@ -33,17 +34,19 @@ export class Game {
         this.world.entities.push(player)
 
         this.inputSystem = new InputSystem()
-        this.CollisionSystem = new CollisionSystem()
+        this.collisionSystem = new CollisionSystem()
         this.renderSystem = new RenderSystem()
         this.bombSystem = new BombSystem()
+        this.lifeSystem = new LifeSystem()
 
     }
 
     update(dt, p) {
 
         this.inputSystem.update(this.world, p)
-        this.CollisionSystem.update(this.world, dt)
+        this.collisionSystem.update(this.world, dt)
         this.bombSystem.update(this.world, dt)
+        this.lifeSystem.update(this.world, dt)
 
     }
 

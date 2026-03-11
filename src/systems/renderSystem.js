@@ -6,6 +6,14 @@ export class RenderSystem {
 
     draw(world, p) {
 
+        if (world.gameOver) {
+
+            p.fill(255)
+            p.textAlign(p.CENTER)
+            p.text("GAME OVER", p.width / 2, p.height / 2)
+
+        }
+
         const grid = world.grid
         const tileSize = world.tileSize
 
@@ -39,15 +47,16 @@ export class RenderSystem {
             p.rect(entity.posX, entity.posY, entity.size, entity.size);
         }
 
-        
+
         for (const entity of world.entities) {
             if (!entity.size || entity.type !== "explosion") continue;
             p.fill(255, 165, 0);
             p.rect(entity.posX, entity.posY, entity.size, entity.size);
         }
-        
+
         for (const entity of world.entities) {
             if (!entity.size || entity.type !== "player") continue;
+            if (!entity.alive) continue
             p.fill(80, 200, 255);
             p.rect(entity.posX, entity.posY, entity.size, entity.size);
         }

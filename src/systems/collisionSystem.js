@@ -19,6 +19,8 @@ export class CollisionSystem {
 
             if (!entity.size || entity.type !== "player") continue
 
+            if (!entity.alive) continue
+
             if (entity.desiredFacing === DIR_NONE) continue
 
             const vec = this.vector(entity.desiredFacing)
