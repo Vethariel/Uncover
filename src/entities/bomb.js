@@ -1,9 +1,9 @@
 export class Bomb {
 
-    constructor(x, y, size, owner, timer = 2.5) {
+    constructor(posX, posY, size, owner, timer = 2.5) {
 
-        this.posx = x
-        this.posy = y
+        this.posX = posX
+        this.posY = posY
 
         this.size = size
 

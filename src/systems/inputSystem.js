@@ -37,8 +37,8 @@ export class InputSystem {
     if (player.activeBombs >= player.maxBombs)
       return
 
-    const tileX = Math.floor((player.x + player.size / 2) / tileSize)
-    const tileY = Math.floor((player.y + player.size / 2) / tileSize)
+    const tileX = Math.floor((player.posX + player.size / 2) / tileSize)
+    const tileY = Math.floor((player.posY + player.size / 2) / tileSize)
 
     if (this.bombExists(world, tileX, tileY))
       return
@@ -61,8 +61,8 @@ export class InputSystem {
 
       if (entity.type !== "bomb") continue
 
-      const bx = Math.floor(entity.posx / tileSize)
-      const by = Math.floor(entity.posy / tileSize)
+      const bx = Math.floor(entity.posX / tileSize)
+      const by = Math.floor(entity.posY / tileSize)
 
       if (bx === tileX && by === tileY)
         return true

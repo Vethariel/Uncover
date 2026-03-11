@@ -1,9 +1,9 @@
 export class Player {
 
-  constructor(x, y, speed, size, facing) {
+  constructor(posX, posY, speed, size, facing) {
 
-    this.x = x
-    this.y = y
+    this.posX = posX
+    this.posY = posY
 
     this.speed = speed
     this.size = size
@@ -15,6 +15,11 @@ export class Player {
 
     this.maxBombs = 2
     this.activeBombs = 0
+
+    this.lives = 3
+    this.alive = true
+
+    this.invulnerableTimer = 0
 
   }
 

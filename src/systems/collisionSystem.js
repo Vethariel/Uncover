@@ -23,8 +23,8 @@ export class CollisionSystem {
 
             const vec = this.vector(entity.desiredFacing)
 
-            const newX = entity.x + vec.x * entity.speed * dt
-            const newY = entity.y + vec.y * entity.speed * dt
+            const newX = entity.posX + vec.x * entity.speed * dt
+            const newY = entity.posY + vec.y * entity.speed * dt
 
             const newLeft = Math.floor(newX / tileSize)
             const newRight = Math.floor((newX + entity.size) / tileSize)
@@ -60,37 +60,37 @@ export class CollisionSystem {
                 switch (entity.desiredFacing) {
                     case DIR_UP:
                         if (sideLeftTop && !sideRightTop) {
-                            entity.x = entity.x + entity.speed * dt
+                            entity.posX = entity.posX + entity.speed * dt
                         } else if (!sideLeftTop && sideRightTop) {
-                            entity.x = entity.x - entity.speed * dt
+                            entity.posX = entity.posX - entity.speed * dt
                         }
                         break
                     case DIR_DOWN:
                         if (sideLeftBottom && !sideRightBottom) {
-                            entity.x = entity.x + entity.speed * dt
+                            entity.posX = entity.posX + entity.speed * dt
                         } else if (!sideLeftBottom && sideRightBottom) {
-                            entity.x = entity.x - entity.speed * dt
+                            entity.posX = entity.posX - entity.speed * dt
                         }
                         break
                     case DIR_LEFT:
                         if (sideLeftTop && !sideLeftBottom) {
-                            entity.y = entity.y + entity.speed * dt
+                            entity.posY = entity.posY + entity.speed * dt
                         } else if (!sideLeftTop && sideLeftBottom) {
-                            entity.y = entity.y - entity.speed * dt
+                            entity.posY = entity.posY - entity.speed * dt
                         }
                         break
                     case DIR_RIGHT:
                         if (sideRightTop && !sideRightBottom) {
-                            entity.y = entity.y + entity.speed * dt
+                            entity.posY = entity.posY + entity.speed * dt
                         } else if (!sideRightTop && sideRightBottom) {
-                            entity.y = entity.y - entity.speed * dt
+                            entity.posY = entity.posY - entity.speed * dt
                         }
                         break
                 }
 
             } else {
-                entity.x = newX
-                entity.y = newY
+                entity.posX = newX
+                entity.posY = newY
             }
 
         }
@@ -137,8 +137,8 @@ export class CollisionSystem {
 
             if (e.type !== "bomb") continue
 
-            const bx = Math.floor(e.posx / tileSize)
-            const by = Math.floor(e.posy / tileSize)
+            const bx = Math.floor(e.posX / tileSize)
+            const by = Math.floor(e.posY / tileSize)
 
             if (bx === x && by === y) {
 

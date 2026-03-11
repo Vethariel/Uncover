@@ -36,13 +36,20 @@ export class RenderSystem {
         for (const entity of world.entities) {
             if (!entity.size || entity.type !== "bomb") continue;
             p.fill(255, 80, 80);
-            p.rect(entity.posx, entity.posy, entity.size, entity.size);
+            p.rect(entity.posX, entity.posY, entity.size, entity.size);
         }
 
+        
+        for (const entity of world.entities) {
+            if (!entity.size || entity.type !== "explosion") continue;
+            p.fill(255, 165, 0);
+            p.rect(entity.posX, entity.posY, entity.size, entity.size);
+        }
+        
         for (const entity of world.entities) {
             if (!entity.size || entity.type !== "player") continue;
             p.fill(80, 200, 255);
-            p.rect(entity.x, entity.y, entity.size, entity.size);
+            p.rect(entity.posX, entity.posY, entity.size, entity.size);
         }
 
     }
