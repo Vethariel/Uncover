@@ -17,26 +17,45 @@ export class CollisionSystem {
 
         for (const entity of world.entities) {
 
+            if (!entity.size || entity.type !== "player") continue
+
             if (entity.desiredFacing === DIR_NONE) continue
 
             const vec = this.vector(entity.desiredFacing)
 
             const newX = entity.x + vec.x * entity.speed * dt
             const newY = entity.y + vec.y * entity.speed * dt
-            
+
             const newLeft = Math.floor(newX / tileSize)
             const newRight = Math.floor((newX + entity.size) / tileSize)
             const newTop = Math.floor(newY / tileSize)
             const newBottom = Math.floor((newY + entity.size) / tileSize)
 
-            const sideLeftTop = this.solid(grid, newLeft, newTop)
-            const sideLeftBottom = this.solid(grid, newLeft, newBottom)
+            const sideLeftTop = this.blockedTile(world, grid, newLeft, newTop, entity)
+            const sideLeftBottom = this.blockedTile(world, grid, newLeft, newBottom, entity)
 
-            const sideRightTop = this.solid(grid, newRight, newTop)
-            const sideRightBottom = this.solid(grid, newRight, newBottom)
+            const sideRightTop = this.blockedTile(world, grid, newRight, newTop, entity)
+            const sideRightBottom = this.blockedTile(world, grid, newRight, newBottom, entity)
+
+            let collision = false
+
+            switch (entity.desiredFacing) {
+                case DIR_UP:
+                    collision = sideLeftTop || sideRightTop
+                    break
+                case DIR_DOWN:
+                    collision = sideLeftBottom || sideRightBottom
+                    break
+                case DIR_LEFT:
+                    collision = sideLeftTop || sideLeftBottom
+                    break
+                case DIR_RIGHT:
+                    collision = sideRightTop || sideRightBottom
+                    break
+            }
 
 
-            if (sideLeftTop || sideLeftBottom || sideRightTop || sideRightBottom) {
+            if (collision) {
 
                 switch (entity.desiredFacing) {
                     case DIR_UP:
@@ -47,7 +66,7 @@ export class CollisionSystem {
                         }
                         break
                     case DIR_DOWN:
-                        if (sideLeftBottom && !sideRightBottom ) {
+                        if (sideLeftBottom && !sideRightBottom) {
                             entity.x = entity.x + entity.speed * dt
                         } else if (!sideLeftBottom && sideRightBottom) {
                             entity.x = entity.x - entity.speed * dt
@@ -68,7 +87,7 @@ export class CollisionSystem {
                         }
                         break
                 }
-                
+
             } else {
                 entity.x = newX
                 entity.y = newY
@@ -79,7 +98,7 @@ export class CollisionSystem {
     }
 
     vector(direction) {
-        
+
         switch (direction) {
             case DIR_UP: return { x: 0, y: -1 }
             case DIR_DOWN: return { x: 0, y: 1 }
@@ -95,6 +114,43 @@ export class CollisionSystem {
         const tile = grid.get(x, y)
 
         return tile === TILE_WALL || tile === TILE_DESTRUCTIBLE
+
+    }
+
+    blockedTile(world, grid, x, y, entity) {
+
+        if (this.solid(grid, x, y))
+            return true
+
+        if (this.bombSolid(world, x, y, entity))
+            return true
+
+        return false
+
+    }
+
+    bombSolid(world, x, y, entity) {
+
+        const tileSize = world.tileSize
+
+        for (const e of world.entities) {
+
+            if (e.type !== "bomb") continue
+
+            const bx = Math.floor(e.posx / tileSize)
+            const by = Math.floor(e.posy / tileSize)
+
+            if (bx === x && by === y) {
+
+                if (e.passThrough && e.owner === entity)
+                    return false
+
+                return true
+            }
+
+        }
+
+        return false
 
     }
 
