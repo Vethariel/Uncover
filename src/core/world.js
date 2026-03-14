@@ -1,7 +1,8 @@
 import { level1 } from "../levels/level1.js"
 import { LevelLoader } from "../world/levelLoader.js"
 import { Enemy } from "../entities/enemy.js"
-import { ENEMY_SIZE, ENEMY_SPEED } from "../config/constants.js"
+import { ENEMY_SIZE, ENEMY_SPEED, PLAYER_SIZE, PLAYER_SPEED, DIR_DOWN } from "../config/constants.js"
+import { Player } from "../entities/player.js"
 
 export class World {
 
@@ -15,6 +16,7 @@ export class World {
     this.player = null
     this.playerSpawn = null
     this.enemySpawns = []
+    this.powerUps = {}
 
     this.gameOver = false
     this.respawnTimer = 0
@@ -32,13 +34,21 @@ export class World {
     this.gameWon = false
 
     this.enemySpawns = []
+    this.powerUps = {}
 
     LevelLoader.load(this, level1)
 
-    this.player.posX = this.playerSpawn.x * this.tileSize + (this.tileSize - this.player.size) / 2
-    this.player.posY = this.playerSpawn.y * this.tileSize + (this.tileSize - this.player.size) / 2
-    this.player.lives = 3
-    this.player.alive = true
+    const spawn = this.playerSpawn
+
+    const player = new Player(
+      spawn.x * this.tileSize + (this.tileSize - PLAYER_SIZE) / 2,
+      spawn.y * this.tileSize + (this.tileSize - PLAYER_SIZE) / 2,
+      PLAYER_SPEED,
+      PLAYER_SIZE,
+      DIR_DOWN
+    )
+
+    this.player = player
 
     this.entities.push(this.player)
 

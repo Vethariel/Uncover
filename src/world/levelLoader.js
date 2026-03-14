@@ -1,5 +1,6 @@
 import { Grid } from "./grid.js"
 import { TILE_EMPTY, TILE_WALL, TILE_DESTRUCTIBLE } from "../config/constants.js"
+import { PowerUpPool } from "./powerUpPool.js"
 
 export class LevelLoader {
 
@@ -46,6 +47,8 @@ export class LevelLoader {
     }
 
     world.grid = grid
+
+    PowerUpPool.generate(world)
 
   }
 

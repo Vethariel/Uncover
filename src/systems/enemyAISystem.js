@@ -18,7 +18,7 @@ export class EnemyAISystem {
 
         for (const entity of world.entities) {
 
-            if (entity.type !== "enemy") continue
+            if (!entity.size || entity.type !== "enemy") continue
             if (!entity.alive) continue
 
             entity.thinkTimer -= dt

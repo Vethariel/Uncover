@@ -12,6 +12,7 @@ import { CollisionSystem } from "../systems/collisionSystem.js"
 import { RenderSystem } from "../systems/renderSystem.js"
 import { BombSystem } from "../systems/bombSystem.js"
 import { LifeSystem } from "../systems/lifeSystem.js"
+import { PowerUpSystem } from "../systems/powerUpSystem.js"
 
 import { DIR_DOWN, PLAYER_SIZE, PLAYER_SPEED, TILE_SIZE, ENEMY_SIZE, ENEMY_SPEED } from "../config/constants.js"
 
@@ -52,6 +53,7 @@ export class Game {
         this.renderSystem = new RenderSystem()
         this.bombSystem = new BombSystem()
         this.lifeSystem = new LifeSystem()
+        this.powerUpSystem = new PowerUpSystem()
 
     }
 
@@ -59,6 +61,7 @@ export class Game {
 
         this.inputSystem.update(this.world, p)
         this.enemyAISystem.update(this.world, dt)
+        this.powerUpSystem.update(this.world, dt)
         this.collisionSystem.update(this.world, dt)
         this.bombSystem.update(this.world, dt)
         this.lifeSystem.update(this.world, dt)

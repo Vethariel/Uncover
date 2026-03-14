@@ -13,8 +13,9 @@ export class Player {
 
     this.type = "player"  
 
-    this.maxBombs = 2
+    this.maxBombs = 1
     this.activeBombs = 0
+    this.bombRange = 1
 
     this.lives = 3
     this.alive = true

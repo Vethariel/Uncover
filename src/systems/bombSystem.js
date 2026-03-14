@@ -48,6 +48,7 @@ export class BombSystem {
 
         if (grid.get(tileX, tileY) === TILE_EXPLOSION) {
           grid.set(tileX, tileY, TILE_EMPTY)
+          this.revealPowerUp(world, tileX, tileY)
         }
       }
 
@@ -69,7 +70,7 @@ export class BombSystem {
 
     this.spawnExplosion(world, tileX, tileY)
 
-    const range = 3
+    const range = bomb.owner.bombRange || 1
 
     const directions = [
       { x: 1, y: 0 },
@@ -119,6 +120,12 @@ export class BombSystem {
     const x = tx * tileSize
     const y = ty * tileSize
 
+    // Elimina power up vivo si lo hay
+    const key = `${tx},${ty}`
+    if (world.powerUps?.[key]?.alive) {
+      delete world.powerUps[key]
+    }
+
     world.entities.push(new Explosion(x, y, tileSize))
 
   }
@@ -141,6 +148,15 @@ export class BombSystem {
       }
 
     }
+
+  }
+
+  revealPowerUp(world, tx, ty) {
+
+    const key = `${tx},${ty}`
+    const powerUp = world.powerUps?.[key]
+
+    if (powerUp) powerUp.alive = true
 
   }
 

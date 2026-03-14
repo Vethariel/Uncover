@@ -3,6 +3,7 @@ import { TILE_WALL, TILE_DESTRUCTIBLE } from "../config/constants.js"
 const LAYER_ORDER = ["bomb", "explosion", "enemy", "player"]
 
 const ENTITY_COLORS = {
+    powerUp: [255, 255, 0],
     bomb: [30, 255, 30],
     explosion: [255, 165, 0],
     enemy: [220, 60, 60],
@@ -68,6 +69,19 @@ export class RenderSystem {
                 if (entity.alive === false) continue
                 p.rect(entity.posX, entity.posY, entity.size, entity.size)
             }
+        }
+
+        const powerUpColors = {
+            life: [255, 100, 100],
+            bomb: [255, 80, 200],
+            range: [100, 200, 255],
+            speed: [100, 255, 150],
+        }
+
+        for (const powerUp of Object.values(world.powerUps ?? {})) {
+            if (powerUp.alive === false) continue
+            p.fill(...(powerUpColors[powerUp.kind] ?? [255, 255, 0]))
+            p.rect(powerUp.posX, powerUp.posY, powerUp.size, powerUp.size)
         }
 
     }
