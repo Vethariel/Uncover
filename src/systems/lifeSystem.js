@@ -71,8 +71,16 @@ export class LifeSystem {
         // Condición de victoria
         const enemiesAlive = world.entities.some(e => e.type === "enemy" && e.alive)
 
-        if (!enemiesAlive && !world.gameOver) {
-            world.gameWon = true
+        // Activa portal cuando no quedan enemigos
+        if (!enemiesAlive && world.portal) {
+            world.portal.active = true
+        }
+
+        // Chequea si el jugador toca el portal activo
+        if (world.portal?.active && world.player.alive) {
+            if (this.overlaps(world.player, world.portal)) {
+                this.handlePortal(world)
+            }
         }
 
     }
@@ -118,6 +126,19 @@ export class LifeSystem {
             a.posY < b.posY + b.size &&
             a.posY + a.size > b.posY
         )
+    }
+
+    handlePortal(world) {
+
+        if (world.isLastLevel()) {
+            world.gameWon = true
+        } else {
+            world.entities = world.entities.filter(
+                e => e.type === "player"
+            )
+            world.loadNextLevel()
+        }
+
     }
 
 }

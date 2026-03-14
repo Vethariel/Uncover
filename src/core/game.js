@@ -47,6 +47,8 @@ export class Game {
             this.world.entities.push(enemy)
         }
 
+        this.world.spawnPortal()
+
         this.enemyAISystem = new EnemyAISystem()
         this.inputSystem = new InputSystem()
         this.collisionSystem = new CollisionSystem()

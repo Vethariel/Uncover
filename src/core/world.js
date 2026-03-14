@@ -1,8 +1,9 @@
-import { level1 } from "../levels/level1.js"
+import { LEVELS } from "../levels/levels.js"
 import { LevelLoader } from "../world/levelLoader.js"
 import { Enemy } from "../entities/enemy.js"
 import { ENEMY_SIZE, ENEMY_SPEED, PLAYER_SIZE, PLAYER_SPEED, DIR_DOWN } from "../config/constants.js"
 import { Player } from "../entities/player.js"
+import { Portal } from "../entities/portal.js"
 
 export class World {
 
@@ -23,6 +24,9 @@ export class World {
 
     this.gameWon = false
 
+    this.currentLevelIndex = 0
+    this.portal = null
+
   }
 
   reset() {
@@ -33,10 +37,13 @@ export class World {
     this.gameOver = false
     this.gameWon = false
 
+    this.portal = null
+
     this.enemySpawns = []
     this.powerUps = {}
+    this.currentLevelIndex = 0
 
-    LevelLoader.load(this, level1)
+    LevelLoader.load(this, LEVELS[this.currentLevelIndex])
 
     const spawn = this.playerSpawn
 
@@ -64,5 +71,55 @@ export class World {
 
     }
 
+    this.spawnPortal()
+
   }
+
+  spawnPortal() {
+
+    if (!this.portalSpawn) return
+
+    const ts = this.tileSize
+    const portal = new Portal(
+      this.portalSpawn.x * ts,
+      this.portalSpawn.y * ts,
+      ts
+    )
+
+    this.portal = portal
+
+  }
+
+  loadNextLevel() {
+
+    this.currentLevelIndex++
+    this.enemySpawns = []
+    this.powerUps = {}
+    this.portal = null
+
+    LevelLoader.load(this, LEVELS[this.currentLevelIndex])
+
+    // Reposiciona player
+    this.player.posX = this.playerSpawn.x * this.tileSize + (this.tileSize - this.player.size) / 2
+    this.player.posY = this.playerSpawn.y * this.tileSize + (this.tileSize - this.player.size) / 2
+
+    // Respawnea enemigos
+    for (const spawn of this.enemySpawns) {
+      const enemy = new Enemy(
+        spawn.x * this.tileSize + (this.tileSize - ENEMY_SIZE) / 2,
+        spawn.y * this.tileSize + (this.tileSize - ENEMY_SIZE) / 2,
+        ENEMY_SPEED,
+        ENEMY_SIZE
+      )
+      this.entities.push(enemy)
+    }
+
+    this.spawnPortal()
+
+  }
+
+  isLastLevel() {
+    return this.currentLevelIndex >= LEVELS.length - 1
+  }
+
 }

@@ -84,6 +84,12 @@ export class RenderSystem {
             p.rect(powerUp.posX, powerUp.posY, powerUp.size, powerUp.size)
         }
 
+        if (world.portal) {
+            if (world.portal.active) p.fill(120, 60, 200)  // morado activo
+            else p.fill(60, 60, 60)                          // gris inactivo
+            p.rect(world.portal.posX, world.portal.posY, world.portal.size, world.portal.size)
+        }
+
     }
 
     drawGameOver(p) {
