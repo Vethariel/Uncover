@@ -31,6 +31,11 @@ export class LevelLoader {
             world.playerSpawn = { x, y }
             break
 
+          case "E":
+            grid.set(x, y, TILE_EMPTY)
+            world.enemySpawns.push({ x, y })
+            break
+
           default:
             grid.set(x, y, TILE_EMPTY)
 

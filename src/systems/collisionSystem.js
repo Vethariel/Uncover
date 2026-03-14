@@ -17,7 +17,7 @@ export class CollisionSystem {
 
         for (const entity of world.entities) {
 
-            if (!entity.size || entity.type !== "player") continue
+            if (!entity.size || (entity.type !== "player" && entity.type !== "enemy")) continue
 
             if (!entity.alive) continue
 

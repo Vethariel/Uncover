@@ -1,65 +1,98 @@
-import {
-    TILE_WALL,
-    TILE_DESTRUCTIBLE
-} from "../config/constants.js"
+import { TILE_WALL, TILE_DESTRUCTIBLE } from "../config/constants.js"
+
+const LAYER_ORDER = ["bomb", "explosion", "enemy", "player"]
+
+const ENTITY_COLORS = {
+    bomb: [30, 255, 30],
+    explosion: [255, 165, 0],
+    enemy: [220, 60, 60],
+    player: [80, 200, 255],
+}
+
 export class RenderSystem {
 
     draw(world, p) {
 
-        if (world.gameOver) {
+        this.drawTiles(world, p)
+        this.drawEntities(world, p)
 
-            p.fill(255)
-            p.textAlign(p.CENTER)
-            p.text("GAME OVER", p.width / 2, p.height / 2)
+        if (world.gameWon) this.drawGameWon(p)
+        else if (world.gameOver) this.drawGameOver(p)
 
-        }
+    }
 
-        const grid = world.grid
-        const tileSize = world.tileSize
+    drawTiles(world, p) {
+
+        const { grid, tileSize } = world
 
         p.stroke(60)
-        p.noFill()
 
         for (let y = 0; y < grid.rows; y++) {
             for (let x = 0; x < grid.cols; x++) {
 
                 const tile = grid.tiles[y][x]
 
-                const px = x * tileSize
-                const py = y * tileSize
-
                 if (tile === TILE_WALL) {
                     p.fill(120)
-                    p.rect(px, py, tileSize, tileSize)
+                } else if (tile === TILE_DESTRUCTIBLE) {
+                    p.fill(200, 150, 80)
+                } else {
+                    continue
                 }
 
-                else if (tile === TILE_DESTRUCTIBLE) {
-                    p.fill(200, 150, 80)
-                    p.rect(px, py, tileSize, tileSize)
-                }
+                p.rect(x * tileSize, y * tileSize, tileSize, tileSize)
 
             }
         }
 
-        for (const entity of world.entities) {
-            if (!entity.size || entity.type !== "bomb") continue;
-            p.fill(255, 80, 80);
-            p.rect(entity.posX, entity.posY, entity.size, entity.size);
-        }
+    }
 
+    drawEntities(world, p) {
 
-        for (const entity of world.entities) {
-            if (!entity.size || entity.type !== "explosion") continue;
-            p.fill(255, 165, 0);
-            p.rect(entity.posX, entity.posY, entity.size, entity.size);
-        }
+        const layers = {}
+        for (const type of LAYER_ORDER) layers[type] = []
 
         for (const entity of world.entities) {
-            if (!entity.size || entity.type !== "player") continue;
-            if (!entity.alive) continue
-            p.fill(80, 200, 255);
-            p.rect(entity.posX, entity.posY, entity.size, entity.size);
+            if (entity.size && layers[entity.type]) {
+                layers[entity.type].push(entity)
+            }
         }
+
+        p.noStroke()
+
+        for (const type of LAYER_ORDER) {
+            const color = ENTITY_COLORS[type]
+            p.fill(...color)
+
+            for (const entity of layers[type]) {
+                if (entity.alive === false) continue
+                p.rect(entity.posX, entity.posY, entity.size, entity.size)
+            }
+        }
+
+    }
+
+    drawGameOver(p) {
+
+        p.fill(0, 0, 0, 150)
+        p.rect(0, 0, p.width, p.height)
+
+        p.fill(255)
+        p.textAlign(p.CENTER, p.CENTER)
+        p.textSize(32)
+        p.text("GAME OVER", p.width / 2, p.height / 2)
+
+    }
+
+    drawGameWon(p) {
+
+        p.fill(0, 0, 0, 150)
+        p.rect(0, 0, p.width, p.height)
+
+        p.fill(255, 220, 0)
+        p.textAlign(p.CENTER, p.CENTER)
+        p.textSize(32)
+        p.text("YOU WIN!", p.width / 2, p.height / 2)
 
     }
 

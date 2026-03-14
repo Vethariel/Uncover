@@ -1,5 +1,7 @@
 import { level1 } from "../levels/level1.js"
 import { LevelLoader } from "../world/levelLoader.js"
+import { Enemy } from "../entities/enemy.js"
+import { ENEMY_SIZE, ENEMY_SPEED } from "../config/constants.js"
 
 export class World {
 
@@ -12,9 +14,12 @@ export class World {
     this.entities = []
     this.player = null
     this.playerSpawn = null
+    this.enemySpawns = []
 
     this.gameOver = false
     this.respawnTimer = 0
+
+    this.gameWon = false
 
   }
 
@@ -24,6 +29,9 @@ export class World {
     this.bombs = []
 
     this.gameOver = false
+    this.gameWon = false
+
+    this.enemySpawns = []
 
     LevelLoader.load(this, level1)
 
@@ -34,6 +42,17 @@ export class World {
 
     this.entities.push(this.player)
 
-  }
+    for (const spawn of this.enemySpawns) {
+      const enemy = new Enemy(
+        spawn.x * this.tileSize + (this.tileSize - ENEMY_SIZE) / 2,
+        spawn.y * this.tileSize + (this.tileSize - ENEMY_SIZE) / 2,
+        ENEMY_SPEED,
+        ENEMY_SIZE
+      )
 
+      this.entities.push(enemy)
+
+    }
+
+  }
 }

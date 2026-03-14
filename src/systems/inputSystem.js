@@ -20,7 +20,7 @@ export class InputSystem {
 
     }
 
-    if (world.gameOver && p.keyIsDown('r')) {
+    if ((world.gameOver || world.gameWon) && p.keyIsDown('r')) {
 
       world.reset()
 
