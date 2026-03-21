@@ -23,7 +23,7 @@ export const DIR_DOWN = 2
 export const DIR_LEFT = 3
 export const DIR_RIGHT = 4
 
-export const ENEMY_SIZE = 13   // igual o similar a PLAYER_SIZE
+export const ENEMY_SIZE = 12   // igual o similar a PLAYER_SIZE
 export const ENEMY_SPEED = 30   // más lento que el jugador
 
 // Power ups

@@ -14,82 +14,76 @@ export class CollisionSystem {
 
         const grid = world.grid
         const tileSize = world.tileSize
-
         const entities = [world.player, ...world.enemies]
 
         for (const entity of entities) {
 
             if (!entity.alive) continue
-
             if (entity.desiredFacing === DIR_NONE) continue
 
             const vec = this.vector(entity.desiredFacing)
 
+            // Alineacion preventiva
+            const threshold = entity.size * 0.4
+
+            if (vec.x !== 0) {
+                const tileY = Math.floor((entity.posY + entity.size / 2) / tileSize)
+                const centerY = tileY * tileSize + (tileSize - entity.size) / 2
+                const diffY = centerY - entity.posY
+                if (Math.abs(diffY) < threshold)
+                    entity.posY += Math.sign(diffY) * Math.min(Math.abs(diffY), entity.speed * dt)
+            }
+
+            if (vec.y !== 0) {
+                const tileX = Math.floor((entity.posX + entity.size / 2) / tileSize)
+                const centerX = tileX * tileSize + (tileSize - entity.size) / 2
+                const diffX = centerX - entity.posX
+                if (Math.abs(diffX) < threshold)
+                    entity.posX += Math.sign(diffX) * Math.min(Math.abs(diffX), entity.speed * dt)
+            }
+
             const newX = entity.posX + vec.x * entity.speed * dt
             const newY = entity.posY + vec.y * entity.speed * dt
 
-            const newLeft = Math.floor(newX / tileSize)
-            const newRight = Math.floor((newX + entity.size) / tileSize)
-            const newTop = Math.floor(newY / tileSize)
-            const newBottom = Math.floor((newY + entity.size) / tileSize)
+            // Esquinas de la entidad en nueva posicion
+            const left = Math.floor(newX / tileSize)
+            const right = Math.floor((newX + entity.size) / tileSize)
+            const top = Math.floor(newY / tileSize)
+            const bottom = Math.floor((newY + entity.size) / tileSize)
 
-            const sideLeftTop = this.blockedTile(world, grid, newLeft, newTop, entity)
-            const sideLeftBottom = this.blockedTile(world, grid, newLeft, newBottom, entity)
+            // Eje principal y eje perpendicular segun direccion
+            const moving_h = vec.x !== 0
 
-            const sideRightTop = this.blockedTile(world, grid, newRight, newTop, entity)
-            const sideRightBottom = this.blockedTile(world, grid, newRight, newBottom, entity)
+            const cornerA = moving_h
+                ? this.blockedTile(world, grid, vec.x > 0 ? right : left, top, entity)
+                : this.blockedTile(world, grid, left, vec.y > 0 ? bottom : top, entity)
 
-            let collision = false
+            const cornerB = moving_h
+                ? this.blockedTile(world, grid, vec.x > 0 ? right : left, bottom, entity)
+                : this.blockedTile(world, grid, right, vec.y > 0 ? bottom : top, entity)
 
-            switch (entity.desiredFacing) {
-                case DIR_UP:
-                    collision = sideLeftTop || sideRightTop
-                    break
-                case DIR_DOWN:
-                    collision = sideLeftBottom || sideRightBottom
-                    break
-                case DIR_LEFT:
-                    collision = sideLeftTop || sideLeftBottom
-                    break
-                case DIR_RIGHT:
-                    collision = sideRightTop || sideRightBottom
-                    break
-            }
+            const collision = cornerA || cornerB
 
+            // Lookahead un tile adelante para posible colision
+            const aheadA = moving_h
+                ? this.blockedTile(world, grid, vec.x > 0 ? right + 1 : left - 1, top, entity)
+                : this.blockedTile(world, grid, left, vec.y > 0 ? bottom + 1 : top - 1, entity)
 
-            if (collision) {
+            const aheadB = moving_h
+                ? this.blockedTile(world, grid, vec.x > 0 ? right + 1 : left - 1, bottom, entity)
+                : this.blockedTile(world, grid, right, vec.y > 0 ? bottom + 1 : top - 1, entity)
 
-                switch (entity.desiredFacing) {
-                    case DIR_UP:
-                        if (sideLeftTop && !sideRightTop) {
-                            entity.posX = entity.posX + entity.speed * dt
-                        } else if (!sideLeftTop && sideRightTop) {
-                            entity.posX = entity.posX - entity.speed * dt
-                        }
-                        break
-                    case DIR_DOWN:
-                        if (sideLeftBottom && !sideRightBottom) {
-                            entity.posX = entity.posX + entity.speed * dt
-                        } else if (!sideLeftBottom && sideRightBottom) {
-                            entity.posX = entity.posX - entity.speed * dt
-                        }
-                        break
-                    case DIR_LEFT:
-                        if (sideLeftTop && !sideLeftBottom) {
-                            entity.posY = entity.posY + entity.speed * dt
-                        } else if (!sideLeftTop && sideLeftBottom) {
-                            entity.posY = entity.posY - entity.speed * dt
-                        }
-                        break
-                    case DIR_RIGHT:
-                        if (sideRightTop && !sideRightBottom) {
-                            entity.posY = entity.posY + entity.speed * dt
-                        } else if (!sideRightTop && sideRightBottom) {
-                            entity.posY = entity.posY - entity.speed * dt
-                        }
-                        break
+            const possibleCollision = !collision && ((!aheadA && aheadB) || (aheadA && !aheadB))
+
+            if (collision || possibleCollision) {
+                // Corner assist — empuja en eje perpendicular
+                if (cornerA && !cornerB || aheadA && !aheadB) {
+                    if (moving_h) entity.posY += entity.speed * dt
+                    else entity.posX += entity.speed * dt
+                } else if (!cornerA && cornerB || !aheadA && aheadB) {
+                    if (moving_h) entity.posY -= entity.speed * dt
+                    else entity.posX -= entity.speed * dt
                 }
-
             } else {
                 entity.posX = newX
                 entity.posY = newY
