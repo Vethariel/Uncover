@@ -1,28 +1,67 @@
-import { Game } from "./core/game.js"
+import { SceneManager } from "./core/sceneManager.js"
+import { GameState } from "./core/gameState.js"
+import { INTERNAL_WIDTH, INTERNAL_HEIGHT } from "./config/constants.js"
+import { InputHandler } from "./utils/inputHandler.js"
 
 let sketch = (p) => {
 
-  let game
+  let sceneManager
+  let buffer
+  let inputHandler
+  let gameState
 
   p.setup = function () {
 
-    p.createCanvas(800, 600)
+    p.pixelDensity(1)
 
-    game = new Game()
+    const canvas = p.createCanvas(p.windowWidth, p.windowHeight)
+    canvas.style('display', 'block')
 
+    canvas.elt.style.imageRendering = 'pixelated'
+    p.noSmooth()
+
+    buffer = p.createGraphics(INTERNAL_WIDTH, INTERNAL_HEIGHT)
+    buffer.pixelDensity(1)
+    buffer.noSmooth()
+    buffer.elt.style.imageRendering = 'pixelated'
+
+    inputHandler = new InputHandler()
+    inputHandler.setP(p)
+    gameState = new GameState()
+    sceneManager = new SceneManager(gameState, inputHandler)
+
+    sceneManager.transition('menu')
   }
 
   p.draw = function () {
 
-    const dt = p.deltaTime / 1000
+    const dt = Math.min(p.deltaTime / 1000, 0.05)
 
-    p.background(30)
+    buffer.clear()
+    sceneManager.update(dt, p)
+    sceneManager.render(buffer)
 
-    game.update(dt, p)
+    const scale = Math.max(1, Math.floor(Math.min(
+      p.width / INTERNAL_WIDTH,
+      p.height / INTERNAL_HEIGHT
+    )))
 
-    game.render(p)
+    const scaledW = INTERNAL_WIDTH * scale
+    const scaledH = INTERNAL_HEIGHT * scale
 
+    const offsetX = Math.floor((p.width - scaledW) / 2)
+    const offsetY = Math.floor((p.height - scaledH) / 2)
+
+    p.background(0)
+    p.image(buffer, offsetX, offsetY, scaledW, scaledH)
+
+    inputHandler.flush()
   }
+
+  p.keyPressed = () => inputHandler.onKeyPressed(p.key)
+  p.keyReleased = () => inputHandler.onKeyReleased(p.key)
+
+  p.windowResized = () => p.resizeCanvas(p.windowWidth, p.windowHeight)
 
 }
 

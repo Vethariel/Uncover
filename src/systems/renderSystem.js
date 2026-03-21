@@ -1,25 +1,17 @@
 import { TILE_WALL, TILE_DESTRUCTIBLE } from "../config/constants.js"
 
-const LAYER_ORDER = ["bomb", "explosion", "enemy", "player"]
-
-const ENTITY_COLORS = {
-    powerUp: [255, 255, 0],
-    bomb: [30, 255, 30],
-    explosion: [255, 165, 0],
-    enemy: [220, 60, 60],
-    player: [80, 200, 255],
+const POWERUP_COLORS = {
+    life:  [255, 100, 100],
+    bomb:  [255, 80,  200],
+    range: [100, 200, 255],
+    speed: [100, 255, 150],
 }
 
 export class RenderSystem {
 
     draw(world, p) {
-
         this.drawTiles(world, p)
         this.drawEntities(world, p)
-
-        if (world.gameWon) this.drawGameWon(p)
-        else if (world.gameOver) this.drawGameOver(p)
-
     }
 
     drawTiles(world, p) {
@@ -27,6 +19,7 @@ export class RenderSystem {
         const { grid, tileSize } = world
 
         p.stroke(60)
+        p.strokeWeight(2)
 
         for (let y = 0; y < grid.rows; y++) {
             for (let x = 0; x < grid.cols; x++) {
@@ -41,7 +34,7 @@ export class RenderSystem {
                     continue
                 }
 
-                p.rect(x * tileSize, y * tileSize, tileSize, tileSize)
+                p.rect(Math.floor(x * tileSize), Math.floor(y * tileSize), tileSize, tileSize)
 
             }
         }
@@ -50,69 +43,47 @@ export class RenderSystem {
 
     drawEntities(world, p) {
 
-        const layers = {}
-        for (const type of LAYER_ORDER) layers[type] = []
-
-        for (const entity of world.entities) {
-            if (entity.size && layers[entity.type]) {
-                layers[entity.type].push(entity)
-            }
-        }
-
         p.noStroke()
 
-        for (const type of LAYER_ORDER) {
-            const color = ENTITY_COLORS[type]
-            p.fill(...color)
-
-            for (const entity of layers[type]) {
-                if (entity.alive === false) continue
-                p.rect(entity.posX, entity.posY, entity.size, entity.size)
-            }
+        // Bombas
+        p.fill(30, 255, 30)
+        for (const bomb of world.bombs) {
+            p.rect(bomb.posX, bomb.posY, bomb.size, bomb.size)
         }
 
-        const powerUpColors = {
-            life: [255, 100, 100],
-            bomb: [255, 80, 200],
-            range: [100, 200, 255],
-            speed: [100, 255, 150],
+        // Explosiones
+        p.fill(255, 165, 0)
+        for (const explosion of world.explosions) {
+            p.rect(explosion.posX, explosion.posY, explosion.size, explosion.size)
         }
 
+        // Power ups
         for (const powerUp of Object.values(world.powerUps ?? {})) {
             if (powerUp.alive === false) continue
-            p.fill(...(powerUpColors[powerUp.kind] ?? [255, 255, 0]))
+            p.fill(...(POWERUP_COLORS[powerUp.kind] ?? [255, 255, 0]))
             p.rect(powerUp.posX, powerUp.posY, powerUp.size, powerUp.size)
         }
 
+        // Portal
         if (world.portal) {
-            if (world.portal.active) p.fill(120, 60, 200)  // morado activo
-            else p.fill(60, 60, 60)                          // gris inactivo
+            p.fill(world.portal.active ? [120, 60, 200] : [60, 60, 60])
+            if (world.portal.active) p.fill(120, 60, 200)
+            else p.fill(60, 60, 60)
             p.rect(world.portal.posX, world.portal.posY, world.portal.size, world.portal.size)
         }
 
-    }
+        // Enemigos
+        p.fill(220, 60, 60)
+        for (const enemy of world.enemies) {
+            if (enemy.alive === false) continue
+            p.rect(Math.floor(enemy.posX), Math.floor(enemy.posY), enemy.size, enemy.size)
+        }
 
-    drawGameOver(p) {
-
-        p.fill(0, 0, 0, 150)
-        p.rect(0, 0, p.width, p.height)
-
-        p.fill(255)
-        p.textAlign(p.CENTER, p.CENTER)
-        p.textSize(32)
-        p.text("GAME OVER", p.width / 2, p.height / 2)
-
-    }
-
-    drawGameWon(p) {
-
-        p.fill(0, 0, 0, 150)
-        p.rect(0, 0, p.width, p.height)
-
-        p.fill(255, 220, 0)
-        p.textAlign(p.CENTER, p.CENTER)
-        p.textSize(32)
-        p.text("YOU WIN!", p.width / 2, p.height / 2)
+        // Jugador
+        if (world.player?.alive) {
+            p.fill(80, 200, 255)
+            p.rect(Math.floor(world.player.posX), Math.floor(world.player.posY), world.player.size, world.player.size)
+        }
 
     }
 

@@ -10,17 +10,17 @@ import { Bomb } from "../entities/bomb.js"
 
 export class InputSystem {
 
-  update(world, p) {
+  update(world, inputHandler) {
 
     const player = world.player
 
     if (player.alive) {
 
-      this.handlePlayerInput(world, player, p)
+      this.handlePlayerInput(world, player, inputHandler)
 
     }
 
-    if ((world.gameOver || world.gameWon) && p.keyIsDown('r')) {
+    if ((world.gameOver || world.gameWon) && inputHandler.isJustDown('r')) {
 
       world.reset()
 
@@ -28,18 +28,18 @@ export class InputSystem {
 
   }
 
-  handlePlayerInput(world, player, p) {
+  handlePlayerInput(world, player, inputHandler) {
     let direction = DIR_NONE
 
-    if (p.keyIsDown('a')) direction = DIR_LEFT   // A
-    else if (p.keyIsDown('d')) direction = DIR_RIGHT    // D
-    else if (p.keyIsDown('w')) direction = DIR_UP   // W
-    else if (p.keyIsDown('s')) direction = DIR_DOWN    // S
+    if (inputHandler.isDown('a')) direction = DIR_LEFT   // A
+    else if (inputHandler.isDown('d')) direction = DIR_RIGHT    // D
+    else if (inputHandler.isDown('w')) direction = DIR_UP   // W
+    else if (inputHandler.isDown('s')) direction = DIR_DOWN    // S
 
     player.facing = direction == DIR_NONE ? player.facing : direction
     player.desiredFacing = direction
 
-    if (p.keyIsDown(' ')) {
+    if (inputHandler.isJustDown(' ')) {
       this.tryPlaceBomb(world, player)
     }
   }
@@ -62,7 +62,7 @@ export class InputSystem {
 
     const bomb = new Bomb(bombX, bombY, tileSize, player)
 
-    world.entities.push(bomb)
+    world.bombs.push(bomb)
 
     player.activeBombs++
   }
@@ -71,12 +71,10 @@ export class InputSystem {
 
     const tileSize = world.tileSize
 
-    for (const entity of world.entities) {
+    for (const bomb of world.bombs) {
 
-      if (entity.type !== "bomb") continue
-
-      const bx = Math.floor(entity.posX / tileSize)
-      const by = Math.floor(entity.posY / tileSize)
+      const bx = Math.floor(bomb.posX / tileSize)
+      const by = Math.floor(bomb.posY / tileSize)
 
       if (bx === tileX && by === tileY)
         return true

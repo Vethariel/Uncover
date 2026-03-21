@@ -8,43 +8,41 @@ export class BombSystem {
 
     const tileSize = world.tileSize
 
-    for (const entity of world.entities) {
+    for (const bomb of world.bombs) {
 
-      if (entity.type !== "bomb") continue
+      bomb.timer -= dt
 
-      entity.timer -= dt
-
-      if (entity.timer <= 0) {
-        this.explode(world, entity)
+      if (bomb.timer <= 0) {
+        this.explode(world, bomb)
         continue
       }
 
-      if (!entity.passThrough) continue
+      if (!bomb.passThrough) continue
 
-      const player = entity.owner
+      const player = bomb.owner
 
       const playerTileX = Math.floor((player.posX + player.size / 2) / tileSize)
       const playerTileY = Math.floor((player.posY + player.size / 2) / tileSize)
 
-      const bombTileX = Math.floor(entity.posX / tileSize)
-      const bombTileY = Math.floor(entity.posY / tileSize)
+      const bombTileX = Math.floor(bomb.posX / tileSize)
+      const bombTileY = Math.floor(bomb.posY / tileSize)
 
       if (playerTileX !== bombTileX || playerTileY !== bombTileY) {
-        entity.passThrough = false
+        bomb.passThrough = false
       }
 
     }
 
-    for (const e of world.entities) {
+    for (const explosion of world.explosions) {
 
-      if (e.type !== "explosion") continue
+      if (explosion.type !== "explosion") continue
 
-      e.timer -= dt
+      explosion.timer -= dt
 
-      if (e.timer <= 0) {
+      if (explosion.timer <= 0) {
         const grid = world.grid
-        const tileX = Math.floor(e.posX / tileSize)
-        const tileY = Math.floor(e.posY / tileSize)
+        const tileX = Math.floor(explosion.posX / tileSize)
+        const tileY = Math.floor(explosion.posY / tileSize)
 
         if (grid.get(tileX, tileY) === TILE_EXPLOSION) {
           grid.set(tileX, tileY, TILE_EMPTY)
@@ -54,8 +52,8 @@ export class BombSystem {
 
     }
 
-    world.entities = world.entities.filter(
-      e => e.type !== "explosion" || e.timer > 0
+    world.explosions = world.explosions.filter(
+      explosion => explosion.timer > 0
     )
 
   }
@@ -109,7 +107,7 @@ export class BombSystem {
     const player = bomb.owner
     player.activeBombs--
 
-    world.entities = world.entities.filter(e => e !== bomb)
+    world.bombs = world.bombs.filter(b => b !== bomb)
 
   }
 
@@ -126,7 +124,7 @@ export class BombSystem {
       delete world.powerUps[key]
     }
 
-    world.entities.push(new Explosion(x, y, tileSize))
+    world.explosions.push(new Explosion(x, y, tileSize))
 
   }
 
@@ -134,16 +132,14 @@ export class BombSystem {
 
     const tileSize = world.tileSize
 
-    for (const e of world.entities) {
+    for (const bomb of world.bombs) {
 
-      if (e.type !== "bomb") continue
-
-      const bx = Math.floor(e.posX / tileSize)
-      const by = Math.floor(e.posY / tileSize)
+      const bx = Math.floor(bomb.posX / tileSize)
+      const by = Math.floor(bomb.posY / tileSize)
 
       if (bx === tx && by === ty) {
 
-        e.timer = 0
+        bomb.timer = 0
 
       }
 

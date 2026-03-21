@@ -1,37 +1,41 @@
 import { LEVELS } from "../levels/levels.js"
 import { LevelLoader } from "../world/levelLoader.js"
 import { Enemy } from "../entities/enemy.js"
-import { ENEMY_SIZE, ENEMY_SPEED, PLAYER_SIZE, PLAYER_SPEED, DIR_DOWN } from "../config/constants.js"
 import { Player } from "../entities/player.js"
 import { Portal } from "../entities/portal.js"
+import { ENEMY_SIZE, ENEMY_SPEED, PLAYER_SIZE, PLAYER_SPEED, DIR_DOWN } from "../config/constants.js"
 
 export class World {
 
   constructor(tileSize) {
 
     this.tileSize = tileSize
-
     this.grid = null
-
-    this.entities = []
     this.player = null
+    this.enemies = []
+    this.bombs = []
+    this.explosions = []
     this.playerSpawn = null
+    this.portalSpawn = null
     this.enemySpawns = []
     this.powerUps = {}
-
-    this.gameOver = false
-    this.respawnTimer = 0
-
-    this.gameWon = false
-
-    this.currentLevelIndex = 0
     this.portal = null
 
+    this.currentLevelIndex = 0
+    
+    this.gameOver = false
+    this.gameWon = false
+    this.respawnTimer = 0
   }
 
   reset() {
 
-    this.entities = []
+    this.grid = null
+    this.player = null
+    this.enemies = []
+    this.explosions = []
+    this.playerSpawn = null
+    this.portalSpawn = null
     this.bombs = []
 
     this.gameOver = false
@@ -41,7 +45,6 @@ export class World {
 
     this.enemySpawns = []
     this.powerUps = {}
-    this.currentLevelIndex = 0
 
     LevelLoader.load(this, LEVELS[this.currentLevelIndex])
 
@@ -57,8 +60,6 @@ export class World {
 
     this.player = player
 
-    this.entities.push(this.player)
-
     for (const spawn of this.enemySpawns) {
       const enemy = new Enemy(
         spawn.x * this.tileSize + (this.tileSize - ENEMY_SIZE) / 2,
@@ -67,7 +68,7 @@ export class World {
         ENEMY_SIZE
       )
 
-      this.entities.push(enemy)
+      this.enemies.push(enemy)
 
     }
 
@@ -87,34 +88,6 @@ export class World {
     )
 
     this.portal = portal
-
-  }
-
-  loadNextLevel() {
-
-    this.currentLevelIndex++
-    this.enemySpawns = []
-    this.powerUps = {}
-    this.portal = null
-
-    LevelLoader.load(this, LEVELS[this.currentLevelIndex])
-
-    // Reposiciona player
-    this.player.posX = this.playerSpawn.x * this.tileSize + (this.tileSize - this.player.size) / 2
-    this.player.posY = this.playerSpawn.y * this.tileSize + (this.tileSize - this.player.size) / 2
-
-    // Respawnea enemigos
-    for (const spawn of this.enemySpawns) {
-      const enemy = new Enemy(
-        spawn.x * this.tileSize + (this.tileSize - ENEMY_SIZE) / 2,
-        spawn.y * this.tileSize + (this.tileSize - ENEMY_SIZE) / 2,
-        ENEMY_SPEED,
-        ENEMY_SIZE
-      )
-      this.entities.push(enemy)
-    }
-
-    this.spawnPortal()
 
   }
 

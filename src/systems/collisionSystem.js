@@ -15,9 +15,9 @@ export class CollisionSystem {
         const grid = world.grid
         const tileSize = world.tileSize
 
-        for (const entity of world.entities) {
+        const entities = [world.player, ...world.enemies]
 
-            if (!entity.size || (entity.type !== "player" && entity.type !== "enemy")) continue
+        for (const entity of entities) {
 
             if (!entity.alive) continue
 
@@ -135,16 +135,14 @@ export class CollisionSystem {
 
         const tileSize = world.tileSize
 
-        for (const e of world.entities) {
+        for (const bomb of world.bombs) {
 
-            if (e.type !== "bomb") continue
-
-            const bx = Math.floor(e.posX / tileSize)
-            const by = Math.floor(e.posY / tileSize)
+            const bx = Math.floor(bomb.posX / tileSize)
+            const by = Math.floor(bomb.posY / tileSize)
 
             if (bx === x && by === y) {
 
-                if (e.passThrough && e.owner === entity)
+                if (bomb.passThrough && bomb.owner === entity)
                     return false
 
                 return true

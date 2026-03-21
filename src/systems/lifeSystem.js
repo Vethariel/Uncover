@@ -21,21 +21,20 @@ export class LifeSystem {
 
         }
 
-        for (const entity of world.entities) {
+        const entities = [world.player, ...world.enemies]
 
-            if (entity.type !== "player" && entity.type !== "enemy") continue
+        for (const entity of entities) {
+
             if (!entity.alive) continue
             if (entity.invulnerableTimer > 0) continue  // por si añades invulnerabilidad a enemigos
 
             const tileX = Math.floor((entity.posX + entity.size / 2) / tileSize)
             const tileY = Math.floor((entity.posY + entity.size / 2) / tileSize)
 
-            for (const e of world.entities) {
+            for (const explosion of world.explosions) {
 
-                if (e.type !== "explosion") continue
-
-                const ex = Math.floor(e.posX / tileSize)
-                const ey = Math.floor(e.posY / tileSize)
+                const ex = Math.floor(explosion.posX / tileSize)
+                const ey = Math.floor(explosion.posY / tileSize)
 
                 if (ex === tileX && ey === tileY) {
 
@@ -53,11 +52,9 @@ export class LifeSystem {
         // Después del loop de explosiones, antes de la condición de victoria:
         if (player.alive && player.invulnerableTimer <= 0) {
 
-            for (const entity of world.entities) {
+            for (const enemy of world.enemies) {
 
-                if (entity.type !== "enemy" || !entity.alive) continue
-
-                if (this.overlaps(player, entity)) {
+                if (this.overlaps(player, enemy)) {
                     this.killPlayer(world)
                     break
                 }
@@ -69,7 +66,7 @@ export class LifeSystem {
         if (player.invulnerableTimer > 0) player.invulnerableTimer -= dt
 
         // Condición de victoria
-        const enemiesAlive = world.entities.some(e => e.type === "enemy" && e.alive)
+        const enemiesAlive = world.enemies.some(e => e.alive)
 
         // Activa portal cuando no quedan enemigos
         if (!enemiesAlive && world.portal) {
@@ -79,7 +76,7 @@ export class LifeSystem {
         // Chequea si el jugador toca el portal activo
         if (world.portal?.active && world.player.alive) {
             if (this.overlaps(world.player, world.portal)) {
-                this.handlePortal(world)
+                world.gameWon = true
             }
         }
 
@@ -101,7 +98,7 @@ export class LifeSystem {
     killEnemy(world, enemy) {
 
         enemy.alive = false
-        world.entities = world.entities.filter(e => e !== enemy)
+        world.enemies = world.enemies.filter(e => e !== enemy)
 
     }
 
@@ -126,19 +123,6 @@ export class LifeSystem {
             a.posY < b.posY + b.size &&
             a.posY + a.size > b.posY
         )
-    }
-
-    handlePortal(world) {
-
-        if (world.isLastLevel()) {
-            world.gameWon = true
-        } else {
-            world.entities = world.entities.filter(
-                e => e.type === "player"
-            )
-            world.loadNextLevel()
-        }
-
     }
 
 }

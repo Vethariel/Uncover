@@ -16,17 +16,16 @@ export class EnemyAISystem {
 
     update(world, dt) {
 
-        for (const entity of world.entities) {
+        for (const enemy of world.enemies) {
+            
+            if (!enemy.alive) continue
 
-            if (!entity.size || entity.type !== "enemy") continue
-            if (!entity.alive) continue
+            enemy.thinkTimer -= dt
 
-            entity.thinkTimer -= dt
-
-            if (entity.thinkTimer <= 0) {
-                entity.thinkTimer = entity.thinkInterval
-                entity.currentDirection = this.chooseDirection(world, entity)
-                entity.desiredFacing = entity.currentDirection
+            if (enemy.thinkTimer <= 0) {
+                enemy.thinkTimer = enemy.thinkInterval
+                enemy.currentDirection = this.chooseDirection(world, enemy)
+                enemy.desiredFacing = enemy.currentDirection
             }
 
         }
