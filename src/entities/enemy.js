@@ -1,8 +1,10 @@
+import { Blackboard }           from "../ai/blackboard.js"
+import { createBasicEnemyTree } from "../ai/trees/basicEnemy.js"
 import { DIR_DOWN } from "../config/constants.js"
 
 export class Enemy {
 
-    constructor(posX, posY, speed, size) {
+    constructor(posX, posY, speed, size, tree = createBasicEnemyTree()) {
 
         this.posX = posX
         this.posY = posY
@@ -12,6 +14,10 @@ export class Enemy {
 
         this.facing = DIR_DOWN
         this.desiredFacing = DIR_DOWN
+        this.currentDirection = DIR_DOWN
+        
+        this.behaviorTree = tree
+        this.blackboard = new Blackboard()
 
         this.type = "enemy"
 
@@ -21,7 +27,6 @@ export class Enemy {
         // IA
         this.thinkTimer = 0
         this.thinkInterval = 0.4  // recalcula dirección cada 400ms
-        this.currentDirection = DIR_DOWN
 
     }
 

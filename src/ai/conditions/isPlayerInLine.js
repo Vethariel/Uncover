@@ -1,0 +1,41 @@
+import { BTNode, BT_SUCCESS, BT_FAILURE } from "../behaviorTree.js"
+import { TILE_WALL, TILE_DESTRUCTIBLE }    from "../../config/constants.js"
+
+export class IsPlayerInLine extends BTNode {
+
+    tick(enemy, world) {
+
+        if (!world.player?.alive) return BT_FAILURE
+
+        const ts     = world.tileSize
+        const tileX  = Math.floor((enemy.posX  + enemy.size  / 2) / ts)
+        const tileY  = Math.floor((enemy.posY  + enemy.size  / 2) / ts)
+        const playerX = Math.floor((world.player.posX + world.player.size / 2) / ts)
+        const playerY = Math.floor((world.player.posY + world.player.size / 2) / ts)
+
+        // Misma fila o columna con línea de visión libre
+        if (tileX === playerX) {
+            const minY = Math.min(tileY, playerY)
+            const maxY = Math.max(tileY, playerY)
+            for (let y = minY + 1; y < maxY; y++) {
+                const tile = world.grid.get(tileX, y)
+                if (tile === TILE_WALL || tile === TILE_DESTRUCTIBLE) return BT_FAILURE
+            }
+            return BT_SUCCESS
+        }
+
+        if (tileY === playerY) {
+            const minX = Math.min(tileX, playerX)
+            const maxX = Math.max(tileX, playerX)
+            for (let x = minX + 1; x < maxX; x++) {
+                const tile = world.grid.get(x, tileY)
+                if (tile === TILE_WALL || tile === TILE_DESTRUCTIBLE) return BT_FAILURE
+            }
+            return BT_SUCCESS
+        }
+
+        return BT_FAILURE
+
+    }
+
+}
