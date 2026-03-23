@@ -1,6 +1,6 @@
 import { BTNode, BT_SUCCESS, BT_RUNNING } from "../behaviorTree.js"
 import { DIR_UP, DIR_DOWN, DIR_LEFT, DIR_RIGHT } from "../../config/constants.js"
-import { TILE_WALL, TILE_DESTRUCTIBLE }          from "../../config/constants.js"
+import { isWalkable } from "../helpers/dangerHelper.js"
 
 const ALL_DIRS = [DIR_UP, DIR_DOWN, DIR_LEFT, DIR_RIGHT]
 const VECTORS  = {
@@ -25,8 +25,7 @@ export class Patrol extends BTNode {
         const dirs = ALL_DIRS.filter(dir => {
             const nx   = tileX + VECTORS[dir].x
             const ny   = tileY + VECTORS[dir].y
-            const tile = world.grid.get(nx, ny)
-            return tile !== TILE_WALL && tile !== TILE_DESTRUCTIBLE
+            return isWalkable(world, nx, ny) 
         })
 
         if (dirs.length === 0) return BT_SUCCESS

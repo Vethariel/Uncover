@@ -50,8 +50,24 @@ function lineOfSight(world, fromX, fromY, toX, toY) {
 
 }
 
+// En dangerHelper.js
 export function isSafe(world, tileX, tileY) {
     const tile = world.grid.get(tileX, tileY)
     if (tile === TILE_WALL || tile === TILE_DESTRUCTIBLE) return false
+    if (hasBomb(world, tileX, tileY)) return false
     return !isDangerous(world, tileX, tileY)
+}
+
+export function isWalkable(world, tileX, tileY) {
+    const tile = world.grid.get(tileX, tileY)
+    if (tile === TILE_WALL || tile === TILE_DESTRUCTIBLE) return false
+    if (hasBomb(world, tileX, tileY)) return false
+    return true
+}
+
+function hasBomb(world, tileX, tileY) {
+    for (const bomb of world.bombs) {
+        if (bomb.tileX === tileX && bomb.tileY === tileY) return true
+    }
+    return false
 }

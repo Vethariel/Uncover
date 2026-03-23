@@ -1,6 +1,6 @@
 // ai/helpers/bfsHelper.js
 import { DIR_UP, DIR_DOWN, DIR_LEFT, DIR_RIGHT, TILE_WALL, TILE_DESTRUCTIBLE } from "../../config/constants.js"
-import { isSafe } from "./dangerHelper.js"
+import { isSafe, isWalkable } from "./dangerHelper.js"
 
 const ALL_DIRS = [DIR_UP, DIR_DOWN, DIR_LEFT, DIR_RIGHT]
 const VECTORS  = {
@@ -33,8 +33,7 @@ export function bfsToTarget(world, startX, startY, goalX, goalY, avoidDanger = t
             if (avoidDanger) {
                 if (!isSafe(world, nx, ny) && !(nx === goalX && ny === goalY)) continue
             } else {
-                const tile = world.grid.get(nx, ny)
-                if (tile === TILE_WALL || tile === TILE_DESTRUCTIBLE) continue
+                if (!isWalkable(world, nx, ny)) continue
             }
 
             const nextFirstDir = firstDir ?? dir
@@ -72,7 +71,7 @@ export function bfsToSafeTile(world, startX, startY) {
             visited.add(key)
 
             const tile = world.grid.get(nx, ny)
-            if (tile === TILE_WALL || tile === TILE_DESTRUCTIBLE) continue
+            if (!isWalkable(world, nx, ny)) continue
 
             const nextFirstDir = firstDir ?? dir
 

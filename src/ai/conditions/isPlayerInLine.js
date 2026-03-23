@@ -1,5 +1,6 @@
 import { BTNode, BT_SUCCESS, BT_FAILURE } from "../behaviorTree.js"
 import { TILE_WALL, TILE_DESTRUCTIBLE }    from "../../config/constants.js"
+import { isWalkable } from "../helpers/dangerHelper.js"
 
 export class IsPlayerInLine extends BTNode {
 
@@ -18,8 +19,7 @@ export class IsPlayerInLine extends BTNode {
             const minY = Math.min(tileY, playerY)
             const maxY = Math.max(tileY, playerY)
             for (let y = minY + 1; y < maxY; y++) {
-                const tile = world.grid.get(tileX, y)
-                if (tile === TILE_WALL || tile === TILE_DESTRUCTIBLE) return BT_FAILURE
+                if (!isWalkable(world, tileX, y)) return BT_FAILURE
             }
             return BT_SUCCESS
         }
@@ -28,8 +28,7 @@ export class IsPlayerInLine extends BTNode {
             const minX = Math.min(tileX, playerX)
             const maxX = Math.max(tileX, playerX)
             for (let x = minX + 1; x < maxX; x++) {
-                const tile = world.grid.get(x, tileY)
-                if (tile === TILE_WALL || tile === TILE_DESTRUCTIBLE) return BT_FAILURE
+                if (!isWalkable(world, x, tileY)) return BT_FAILURE
             }
             return BT_SUCCESS
         }
