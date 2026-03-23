@@ -4,14 +4,12 @@ import {
     POWERUP_POOL_RATIO,
     POWERUP_LIFE_CHANCE,
     POWERUP_WEIGHTS,
-    POWERUP_SIZE
 } from "../config/constants.js"
 
 export class PowerUpPool {
 
     static generate(world) {
 
-        const ts = world.tileSize
         const grid = world.grid
 
         // Recolecta todos los tiles destructibles
@@ -46,11 +44,8 @@ export class PowerUpPool {
             // Vida tiene probabilidad independiente
             const kind = Math.random() < POWERUP_LIFE_CHANCE ? "life" : pool[i]
 
-            const px = x * ts + (ts - POWERUP_SIZE) / 2
-            const py = y * ts + (ts - POWERUP_SIZE) / 2
-
             // Guardado por clave de tile para fácil lookup al explotar
-            world.powerUps[`${x},${y}`] = new PowerUp(px, py, POWERUP_SIZE, kind)
+            world.powerUps[`${x},${y}`] = new PowerUp(x, y, world.tileSize, kind)
 
         }
 

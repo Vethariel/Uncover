@@ -1,11 +1,14 @@
 export class PowerUp {
 
-    constructor(posX, posY, size, kind) {
+    constructor(tileX, tileY, size, kind) {
 
-        this.posX = posX
-        this.posY = posY
-        this.size = size
+        this.tileX = tileX
+        this.tileY = tileY
         this.kind = kind   // "life" | "bomb" | "range" | "speed"
+
+        this.size = size
+        this.posX = this.tileX * this.size
+        this.posY = this.tileY * this.size
 
         this.type = "powerup"
         this.alive = false

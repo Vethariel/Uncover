@@ -1,8 +1,6 @@
 export class LifeSystem {
 
     update(world, dt) {
-
-        const tileSize = world.tileSize
         const player = world.player
 
         if (!player.alive && !world.gameOver) {
@@ -28,15 +26,9 @@ export class LifeSystem {
             if (!entity.alive) continue
             if (entity.invulnerableTimer > 0) continue  // por si añades invulnerabilidad a enemigos
 
-            const tileX = Math.floor((entity.posX + entity.size / 2) / tileSize)
-            const tileY = Math.floor((entity.posY + entity.size / 2) / tileSize)
-
             for (const explosion of world.explosions) {
 
-                const ex = Math.floor(explosion.posX / tileSize)
-                const ey = Math.floor(explosion.posY / tileSize)
-
-                if (ex === tileX && ey === tileY) {
+                if (explosion.tileX === entity.tileX && explosion.tileY === entity.tileY) {
 
                     if (entity.type === "player")
                         this.killPlayer(world)
@@ -110,6 +102,9 @@ export class LifeSystem {
 
         player.posX = spawn.x * tileSize + (tileSize - player.size) / 2
         player.posY = spawn.y * tileSize + (tileSize - player.size) / 2
+
+        player.tileX = spawn.x
+        player.tileY = spawn.y
 
         player.alive = true
         player.invulnerableTimer = 2  // 2 segundos de invulnerabilidad

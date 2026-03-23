@@ -8,9 +8,8 @@ export class FleeExplosion extends BTNode {
 
     tick(enemy, world) {
 
-        const ts    = world.tileSize
-        const tileX = Math.floor((enemy.posX + enemy.size / 2) / ts)
-        const tileY = Math.floor((enemy.posY + enemy.size / 2) / ts)
+        const tileX = enemy.tileX
+        const tileY = enemy.tileY
 
         const safeTarget = enemy.blackboard.get('safeTarget')
 

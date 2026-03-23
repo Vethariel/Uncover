@@ -8,11 +8,12 @@ export class ChasePlayer extends BTNode {
 
         if (!world.player?.alive) return BT_FAILURE
 
-        const ts     = world.tileSize
-        const startX = Math.floor((enemy.posX  + enemy.size  / 2) / ts)
-        const startY = Math.floor((enemy.posY  + enemy.size  / 2) / ts)
-        const goalX  = Math.floor((world.player.posX + world.player.size / 2) / ts)
-        const goalY  = Math.floor((world.player.posY + world.player.size / 2) / ts)
+        const player = world.player
+        
+        const startX = enemy.tileX
+        const startY = enemy.tileY
+        const goalX  = player.tileX
+        const goalY  = player.tileY
 
         // BFS evitando tiles peligrosos
         const dir = bfsToTarget(world, startX, startY, goalX, goalY, true)

@@ -1,15 +1,19 @@
 export class Bomb {
 
-    constructor(posX, posY, size, owner, timer = 2.5) {
+    constructor(tileX, tileY, size, owner, range = 1, timer = 2.5) {
 
-        this.posX = posX
-        this.posY = posY
+        this.tileX = tileX
+        this.tileY = tileY
 
         this.size = size
+        this.posX = this.tileX * this.size
+        this.posY = this.tileY * this.size
 
         this.timer = timer
 
         this.owner = owner
+
+        this.range = range
 
         this.passThrough = true
 

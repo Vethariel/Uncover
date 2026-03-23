@@ -1,10 +1,13 @@
 export class Portal {
 
-    constructor(posX, posY, size) {
+    constructor(tileX, tileY, size) {
 
-        this.posX = posX
-        this.posY = posY
+        this.tileX = tileX
+        this.tileY = tileY
+
         this.size = size
+        this.posX = this.tileX * this.size
+        this.posY = this.tileY * this.size
 
         this.type = "portal"
         this.active = false

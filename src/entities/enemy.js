@@ -4,10 +4,13 @@ import { DIR_DOWN } from "../config/constants.js"
 
 export class Enemy {
 
-    constructor(posX, posY, speed, size, tree = createBasicEnemyTree()) {
+    constructor(posX, posY, tileX, tileY, speed, size, tree = createBasicEnemyTree()) {
 
         this.posX = posX
         this.posY = posY
+
+        this.tileX = tileX
+        this.tileY = tileY
 
         this.speed = speed
         this.size = size

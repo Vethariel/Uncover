@@ -7,11 +7,11 @@ export class IsPlayerInLine extends BTNode {
 
         if (!world.player?.alive) return BT_FAILURE
 
-        const ts     = world.tileSize
-        const tileX  = Math.floor((enemy.posX  + enemy.size  / 2) / ts)
-        const tileY  = Math.floor((enemy.posY  + enemy.size  / 2) / ts)
-        const playerX = Math.floor((world.player.posX + world.player.size / 2) / ts)
-        const playerY = Math.floor((world.player.posY + world.player.size / 2) / ts)
+        const player = world.player
+        const tileX  = enemy.tileX
+        const tileY  = enemy.tileY
+        const playerX = player.tileX
+        const playerY = player.tileY
 
         // Misma fila o columna con línea de visión libre
         if (tileX === playerX) {

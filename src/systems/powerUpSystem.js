@@ -11,10 +11,7 @@ export class PowerUpSystem {
         const player = world.player
         if (!player.alive) return
 
-        const ts = world.tileSize
-        const tileX = Math.floor((player.posX + player.size / 2) / ts)
-        const tileY = Math.floor((player.posY + player.size / 2) / ts)
-        const key = `${tileX},${tileY}`
+        const key = `${player.tileX},${player.tileY}`
 
         const powerUp = world.powerUps[key]
 

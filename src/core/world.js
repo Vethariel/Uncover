@@ -53,6 +53,8 @@ export class World {
     const player = new Player(
       spawn.x * this.tileSize + (this.tileSize - PLAYER_SIZE) / 2,
       spawn.y * this.tileSize + (this.tileSize - PLAYER_SIZE) / 2,
+      spawn.x,
+      spawn.y,
       PLAYER_SPEED,
       PLAYER_SIZE,
       DIR_DOWN
@@ -64,6 +66,8 @@ export class World {
       const enemy = new Enemy(
         spawn.x * this.tileSize + (this.tileSize - ENEMY_SIZE) / 2,
         spawn.y * this.tileSize + (this.tileSize - ENEMY_SIZE) / 2,
+        spawn.x,
+        spawn.y,
         ENEMY_SPEED,
         ENEMY_SIZE
       )
@@ -79,12 +83,11 @@ export class World {
   spawnPortal() {
 
     if (!this.portalSpawn) return
-
-    const ts = this.tileSize
+    
     const portal = new Portal(
-      this.portalSpawn.x * ts,
-      this.portalSpawn.y * ts,
-      ts
+      this.portalSpawn.x,
+      this.portalSpawn.y,
+      this.tileSize
     )
 
     this.portal = portal

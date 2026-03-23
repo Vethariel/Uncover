@@ -6,8 +6,6 @@ export class BombSystem {
 
   update(world, dt) {
 
-    const tileSize = world.tileSize
-
     for (const bomb of world.bombs) {
 
       bomb.timer -= dt
@@ -21,13 +19,7 @@ export class BombSystem {
 
       const player = bomb.owner
 
-      const playerTileX = Math.floor((player.posX + player.size / 2) / tileSize)
-      const playerTileY = Math.floor((player.posY + player.size / 2) / tileSize)
-
-      const bombTileX = Math.floor(bomb.posX / tileSize)
-      const bombTileY = Math.floor(bomb.posY / tileSize)
-
-      if (playerTileX !== bombTileX || playerTileY !== bombTileY) {
+      if (player.tileX !== bomb.tileX || player.tileY !== bomb.tileY) {
         bomb.passThrough = false
       }
 
@@ -41,8 +33,8 @@ export class BombSystem {
 
       if (explosion.timer <= 0) {
         const grid = world.grid
-        const tileX = Math.floor(explosion.posX / tileSize)
-        const tileY = Math.floor(explosion.posY / tileSize)
+        const tileX = explosion.tileX
+        const tileY = explosion.tileY
 
         if (grid.get(tileX, tileY) === TILE_EXPLOSION) {
           grid.set(tileX, tileY, TILE_EMPTY)
@@ -61,14 +53,13 @@ export class BombSystem {
   explode(world, bomb) {
 
     const grid = world.grid
-    const tileSize = world.tileSize
 
-    const tileX = Math.floor(bomb.posX / tileSize)
-    const tileY = Math.floor(bomb.posY / tileSize)
+    const tileX = bomb.tileX
+    const tileY = bomb.tileY
 
     this.spawnExplosion(world, tileX, tileY)
 
-    const range = bomb.owner.bombRange || 1
+    const range = bomb.bombRange || 1
 
     const directions = [
       { x: 1, y: 0 },
@@ -113,31 +104,21 @@ export class BombSystem {
 
   spawnExplosion(world, tx, ty) {
 
-    const tileSize = world.tileSize
-
-    const x = tx * tileSize
-    const y = ty * tileSize
-
     // Elimina power up vivo si lo hay
     const key = `${tx},${ty}`
     if (world.powerUps?.[key]?.alive) {
       delete world.powerUps[key]
     }
 
-    world.explosions.push(new Explosion(x, y, tileSize))
+    world.explosions.push(new Explosion(tx, ty, world.tileSize))
 
   }
 
   triggerBomb(world, tx, ty) {
 
-    const tileSize = world.tileSize
-
     for (const bomb of world.bombs) {
 
-      const bx = Math.floor(bomb.posX / tileSize)
-      const by = Math.floor(bomb.posY / tileSize)
-
-      if (bx === tx && by === ty) {
+      if (bomb.tileX === tx && bomb.tileY === ty) {
 
         bomb.timer = 0
 

@@ -3,19 +3,17 @@ import { TILE_WALL, TILE_DESTRUCTIBLE } from "../../config/constants.js"
 // dangerHelper.js
 export function isDangerous(world, tileX, tileY) {
 
-    const ts = world.tileSize
-
     for (const explosion of world.explosions) {
-        if (Math.floor(explosion.posX / ts) === tileX &&
-            Math.floor(explosion.posY / ts) === tileY) return true
+        if (explosion.tileX === tileX &&
+            explosion.tileY === tileY) return true
     }
 
     for (const bomb of world.bombs) {
         if (bomb.timer > 1.5) continue
 
-        const bx = Math.floor(bomb.posX / ts)
-        const by = Math.floor(bomb.posY / ts)
-        const range = (bomb.owner?.bombRange ?? 3)
+        const bx = bomb.tileX
+        const by = bomb.tileY
+        const range = (bomb.bombRange)
 
         if (bx === tileX && Math.abs(by - tileY) <= range) {
             if (lineOfSight(world, bx, by, tileX, tileY)) return true

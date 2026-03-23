@@ -20,12 +20,6 @@ export class InputSystem {
 
     }
 
-    if ((world.gameOver || world.gameWon) && inputHandler.isJustDown('r')) {
-
-      world.reset()
-
-    }
-
   }
 
   handlePlayerInput(world, player, inputHandler) {
@@ -46,21 +40,16 @@ export class InputSystem {
 
   tryPlaceBomb(world, player) {
 
-    const tileSize = world.tileSize
-
     if (player.activeBombs >= player.maxBombs)
       return
 
-    const tileX = Math.floor((player.posX + player.size / 2) / tileSize)
-    const tileY = Math.floor((player.posY + player.size / 2) / tileSize)
+    const tileX = player.tileX
+    const tileY = player.tileY
 
     if (this.bombExists(world, tileX, tileY))
       return
 
-    const bombX = tileX * tileSize
-    const bombY = tileY * tileSize
-
-    const bomb = new Bomb(bombX, bombY, tileSize, player)
+    const bomb = new Bomb(tileX, tileY, world.tileSize,player, player.bombRange)
 
     world.bombs.push(bomb)
 
@@ -69,14 +58,9 @@ export class InputSystem {
 
   bombExists(world, tileX, tileY) {
 
-    const tileSize = world.tileSize
-
     for (const bomb of world.bombs) {
 
-      const bx = Math.floor(bomb.posX / tileSize)
-      const by = Math.floor(bomb.posY / tileSize)
-
-      if (bx === tileX && by === tileY)
+      if (bomb.tileX === tileX && bomb.tileY === tileY)
         return true
     }
 

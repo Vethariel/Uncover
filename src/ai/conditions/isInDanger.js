@@ -6,9 +6,8 @@ export class IsInDanger extends BTNode {
 
     tick(enemy, world) {
 
-        const ts    = world.tileSize
-        const tileX = Math.floor((enemy.posX + enemy.size / 2) / ts)
-        const tileY = Math.floor((enemy.posY + enemy.size / 2) / ts)
+        const tileX = enemy.tileX
+        const tileY = enemy.tileY
 
         if (isDangerous(world, tileX, tileY)) return BT_SUCCESS
 

@@ -36,8 +36,6 @@ export const POWERUP_WEIGHTS = {
     speed: 2,   // velocidad
 }
 
-export const POWERUP_SIZE = 10
-
 // Valores que aplica cada power up
 export const POWERUP_BOMB_AMOUNT = 1
 export const POWERUP_RANGE_AMOUNT = 1

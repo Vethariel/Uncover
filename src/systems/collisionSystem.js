@@ -27,7 +27,7 @@ export class CollisionSystem {
             const threshold = entity.size * 0.4
 
             if (vec.x !== 0) {
-                const tileY = Math.floor((entity.posY + entity.size / 2) / tileSize)
+                const tileY = entity.tileY
                 const centerY = tileY * tileSize + (tileSize - entity.size) / 2
                 const diffY = centerY - entity.posY
                 if (Math.abs(diffY) < threshold)
@@ -35,7 +35,7 @@ export class CollisionSystem {
             }
 
             if (vec.y !== 0) {
-                const tileX = Math.floor((entity.posX + entity.size / 2) / tileSize)
+                const tileX = entity.tileX
                 const centerX = tileX * tileSize + (tileSize - entity.size) / 2
                 const diffX = centerX - entity.posX
                 if (Math.abs(diffX) < threshold)
@@ -89,6 +89,8 @@ export class CollisionSystem {
                 entity.posY = newY
             }
 
+            entity.tileX = Math.floor((entity.posX + entity.size / 2) / tileSize)
+            entity.tileY = Math.floor((entity.posY + entity.size / 2) / tileSize)
         }
 
     }
@@ -127,14 +129,9 @@ export class CollisionSystem {
 
     bombSolid(world, x, y, entity) {
 
-        const tileSize = world.tileSize
-
         for (const bomb of world.bombs) {
 
-            const bx = Math.floor(bomb.posX / tileSize)
-            const by = Math.floor(bomb.posY / tileSize)
-
-            if (bx === x && by === y) {
+            if (bomb.tileX === x && bomb.tileY === y) {
 
                 if (bomb.passThrough && bomb.owner === entity)
                     return false
