@@ -35,6 +35,7 @@ export class Patrol extends BTNode {
 
         enemy.currentDirection = candidates[Math.floor(Math.random() * candidates.length)]
         enemy.desiredFacing    = enemy.currentDirection
+        enemy.facing           = enemy.currentDirection
 
         return BT_RUNNING
 

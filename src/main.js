@@ -10,7 +10,7 @@ let sketch = (p) => {
   let inputHandler
   let gameState
 
-  p.setup = function () {
+  p.setup = async function () {
 
     p.pixelDensity(1)
 
@@ -29,6 +29,8 @@ let sketch = (p) => {
     inputHandler.setP(p)
     gameState = new GameState()
     sceneManager = new SceneManager(gameState, inputHandler)
+
+    await sceneManager.scenes['gameplay'].preload(p)
 
     sceneManager.transition('menu')
   }

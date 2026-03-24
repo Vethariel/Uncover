@@ -59,7 +59,7 @@ export class BombSystem {
 
     this.spawnExplosion(world, tileX, tileY)
 
-    const range = bomb.bombRange || 1
+    const range = bomb.range || 1
 
     const directions = [
       { x: 1, y: 0 },
@@ -80,7 +80,20 @@ export class BombSystem {
         if (tile === TILE_WALL || tile === TILE_EXPLOSION)
           break
 
-        this.spawnExplosion(world, tx, ty)
+        // Es el último tile si alcanzó el rango o hay un destructible
+        const isLast = (i === range)
+        const isPowerUp = world.powerUps?.[`${tx},${ty}`]?.alive
+        const kind = this.explosionKind(dir, isLast, isPowerUp)
+
+        // Si ya hay explosión en este tile, actualiza su kind a segmento
+        const existing = this.getExplosion(world, tx, ty)
+        if (existing) {
+          existing.sprite.current = this.mergeKind(existing.kind, kind)
+          existing.sprite.frame = 0
+          existing.sprite.finished = false
+        } else {
+          this.spawnExplosion(world, tx, ty, kind)
+        }
 
         if (tile === TILE_DESTRUCTIBLE) {
 
@@ -102,7 +115,35 @@ export class BombSystem {
 
   }
 
-  spawnExplosion(world, tx, ty) {
+  explosionKind(dir, isLast, isPowerUp) {
+    if (isPowerUp) return 'powerUp'
+    if (dir.x !== 0) return isLast ? (dir.x > 0 ? 'tipRight' : 'tipLeft') : 'horizontal'
+    if (dir.y !== 0) return isLast ? (dir.y > 0 ? 'tipDown' : 'tipUp') : 'vertical'
+    return 'center'
+  }
+
+  // Cuando dos explosiones se encuentran, la punta se convierte en segmento
+  mergeKind(existing, incoming) {
+    if (existing === 'powerUp' || incoming === 'powerUp') return 'powerUp'
+    if (existing === 'center' || incoming === 'center') return 'center'
+
+    const segments = ['horizontal', 'vertical', 'center']
+    if (segments.includes(existing)) return existing
+    // Si la existente es una punta y llega otra explosión, pasa a segmento
+    if (['tipLeft', 'tipRight'].includes(existing)) return 'horizontal'
+    if (['tipUp', 'tipDown'].includes(existing)) return 'vertical'
+    return incoming
+  }
+
+  hasExplosion(world, tileX, tileY) {
+    return world.explosions.some(e => e.tileX === tileX && e.tileY === tileY)
+  }
+
+  getExplosion(world, tileX, tileY) {
+    return world.explosions.find(e => e.tileX === tileX && e.tileY === tileY)
+  }
+
+  spawnExplosion(world, tx, ty, kind) {
 
     // Elimina power up vivo si lo hay
     const key = `${tx},${ty}`
@@ -110,7 +151,7 @@ export class BombSystem {
       delete world.powerUps[key]
     }
 
-    world.explosions.push(new Explosion(tx, ty, world.tileSize))
+    world.explosions.push(new Explosion(tx, ty, world.tileSize, kind))
 
   }
 

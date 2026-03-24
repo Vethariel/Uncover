@@ -1,3 +1,5 @@
+import { BOMB_SPRITE, createSpriteState } from "../core/spriteConfig.js"
+
 export class Bomb {
 
     constructor(tileX, tileY, size, owner, range = 1, timer = 2.5) {
@@ -18,6 +20,9 @@ export class Bomb {
         this.passThrough = true
 
         this.type = "bomb"
+
+        this.sprite = createSpriteState(BOMB_SPRITE)
+        this.sprite.current = 'pulse'
 
     }
 

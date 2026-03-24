@@ -1,25 +1,15 @@
 import { TILE_WALL, TILE_DESTRUCTIBLE } from "../config/constants.js"
 
-const POWERUP_COLORS = {
-    life:  [255, 100, 100],
-    bomb:  [255, 80,  200],
-    range: [100, 200, 255],
-    speed: [100, 255, 150],
-}
-
 export class RenderSystem {
 
-    draw(world, p) {
+    draw(world, assets, p) {
         this.drawTiles(world, p)
-        this.drawEntities(world, p)
+        this.drawEntities(world, assets, p)
     }
 
     drawTiles(world, p) {
 
         const { grid, tileSize } = world
-
-        p.stroke(60)
-        p.strokeWeight(2)
 
         for (let y = 0; y < grid.rows; y++) {
             for (let x = 0; x < grid.cols; x++) {
@@ -41,27 +31,24 @@ export class RenderSystem {
 
     }
 
-    drawEntities(world, p) {
+    drawEntities(world, assets, p) {
 
         p.noStroke()
 
         // Bombas
-        p.fill(30, 255, 30)
         for (const bomb of world.bombs) {
-            p.rect(bomb.posX, bomb.posY, bomb.size, bomb.size)
+            this.drawSprite(p, assets, bomb)
         }
 
         // Explosiones
-        p.fill(255, 165, 0)
         for (const explosion of world.explosions) {
-            p.rect(explosion.posX, explosion.posY, explosion.size, explosion.size)
+            this.drawSprite(p, assets, explosion)
         }
 
         // Power ups
         for (const powerUp of Object.values(world.powerUps ?? {})) {
             if (powerUp.alive === false) continue
-            p.fill(...(POWERUP_COLORS[powerUp.kind] ?? [255, 255, 0]))
-            p.rect(powerUp.posX, powerUp.posY, powerUp.size, powerUp.size)
+            this.drawSprite(p, assets, powerUp)
         }
 
         // Portal
@@ -73,17 +60,36 @@ export class RenderSystem {
         }
 
         // Enemigos
-        p.fill(220, 60, 60)
         for (const enemy of world.enemies) {
-            if (enemy.alive === false) continue
-            p.rect(Math.floor(enemy.posX), Math.floor(enemy.posY), enemy.size, enemy.size)
+            this.drawSprite(p, assets, enemy)
         }
 
         // Jugador
-        if (world.player?.alive) {
-            p.fill(80, 200, 255)
-            p.rect(Math.floor(world.player.posX), Math.floor(world.player.posY), world.player.size, world.player.size)
-        }
+        this.drawSprite(p, assets, world.player)
+
+    }
+
+    drawSprite(p, assets, entity) {
+
+        const sprite = entity.sprite
+        if (!sprite) return
+
+        const sheet = assets.get(sprite.sheet)
+        if (!sheet) return
+
+        const anim = sprite.animations[sprite.current]
+        if (!anim) return
+
+        if (anim.loop === false && sprite.finished) return
+
+        const sx = sprite.frame * sprite.frameWidth
+        const sy = anim.row * sprite.frameHeight
+
+        // Centra el sprite sobre la hitbox
+        const drawX = Math.floor(entity.posX + (entity.size - sprite.frameWidth) / 2)
+        const drawY = Math.floor(entity.posY + (entity.size - sprite.frameHeight))  // alineado al piso
+        p.image(sheet, drawX, drawY, sprite.frameWidth, sprite.frameHeight,
+            sx, sy, sprite.frameWidth, sprite.frameHeight)
 
     }
 

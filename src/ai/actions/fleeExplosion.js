@@ -46,6 +46,7 @@ export class FleeExplosion extends BTNode {
         enemy.blackboard.set('safeTarget', result.tile)
         enemy.currentDirection = result.dir
         enemy.desiredFacing    = result.dir
+        enemy.facing           = result.dir
         enemy.thinkTimer       = 0.15
 
         return BT_RUNNING

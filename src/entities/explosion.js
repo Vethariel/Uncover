@@ -1,9 +1,13 @@
+import { EXPLOSION_SPRITE, createSpriteState } from "../core/spriteConfig.js"
+
 export class Explosion {
 
-  constructor(tileX, tileY, size, timer = 0.3) {
+  constructor(tileX, tileY, size, kind = 'center', timer = 0.3) {
 
     this.tileX = tileX
     this.tileY = tileY
+
+    this.kind = kind
 
     this.size = size
     this.posX = this.tileX * this.size
@@ -12,6 +16,9 @@ export class Explosion {
     this.timer = timer
 
     this.type = "explosion"
+
+    this.sprite = createSpriteState(EXPLOSION_SPRITE)
+    this.sprite.current = kind
 
   }
 

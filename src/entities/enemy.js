@@ -1,6 +1,7 @@
 import { Blackboard }           from "../ai/blackboard.js"
 import { createBasicEnemyTree } from "../ai/trees/basicEnemy.js"
 import { DIR_DOWN } from "../config/constants.js"
+import { ENEMY_SPRITE, createSpriteState } from "../core/spriteConfig.js"
 
 export class Enemy {
 
@@ -13,6 +14,7 @@ export class Enemy {
         this.tileY = tileY
 
         this.speed = speed
+        this.baseSpeed = speed
         this.size = size
 
         this.facing = DIR_DOWN
@@ -30,6 +32,10 @@ export class Enemy {
         // IA
         this.thinkTimer = 0
         this.thinkInterval = 0.4  // recalcula dirección cada 400ms
+        this.deathTimer = 0
+
+
+        this.sprite = createSpriteState(ENEMY_SPRITE)
 
     }
 

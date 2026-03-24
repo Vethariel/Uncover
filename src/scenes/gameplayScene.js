@@ -7,6 +7,9 @@ import { BombSystem } from "../systems/bombSystem.js"
 import { LifeSystem } from "../systems/lifeSystem.js"
 import { PowerUpSystem } from "../systems/powerUpSystem.js"
 
+import { AssetManager } from "../core/assetManager.js"
+import { AnimationSystem } from "../systems/animationSystem.js"
+
 import {
     TILE_SIZE
 } from "../config/constants.js"
@@ -26,8 +29,18 @@ export class GameplayScene {
         this.lifeSystem = new LifeSystem()
         this.powerUpSystem = new PowerUpSystem()
 
+        this.assets = new AssetManager()
+        this.animationSystem = new AnimationSystem()
+
         this.world = null
 
+    }
+
+    async preload(p) {
+        await this.assets.loadSheet('player', 'assets/sprites/player.png', p)
+        await this.assets.loadSheet('enemy', 'assets/sprites/enemy.png', p)
+        await this.assets.loadSheet('bombs', 'assets/sprites/bomb.png', p)
+        await this.assets.loadSheet('powerUp', 'assets/sprites/powerUp.png', p)
     }
 
     onEnter() {
@@ -54,6 +67,7 @@ export class GameplayScene {
         this.bombSystem.update(this.world, dt)
         this.lifeSystem.update(this.world, dt)
         this.powerUpSystem.update(this.world, dt)
+        this.animationSystem.update(this.world,dt)
 
         this._handleTransitions()
 
@@ -61,7 +75,7 @@ export class GameplayScene {
 
     render(buffer) {
         if (!this.world) return
-        this.renderSystem.draw(this.world, buffer)
+        this.renderSystem.draw(this.world, this.assets, buffer)
 
     }
 

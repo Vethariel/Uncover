@@ -33,7 +33,7 @@ export class InputSystem {
     player.facing = direction == DIR_NONE ? player.facing : direction
     player.desiredFacing = direction
 
-    if (inputHandler.isJustDown(' ')) {
+    if (inputHandler.isDown(' ')) {
       this.tryPlaceBomb(world, player)
     }
   }

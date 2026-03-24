@@ -41,12 +41,19 @@ export class LifeSystem {
 
         }
 
+        for (const enemy of world.enemies) {
+            if (!enemy.alive) {
+                enemy.deathTimer -= dt
+            }
+        }
+        world.enemies = world.enemies.filter(e => e.alive || e.deathTimer > 0)
+
         // Después del loop de explosiones, antes de la condición de victoria:
         if (player.alive && player.invulnerableTimer <= 0) {
 
             for (const enemy of world.enemies) {
 
-                if (this.overlaps(player, enemy)) {
+                if (enemy.alive && this.overlaps(player, enemy)) {
                     this.killPlayer(world)
                     break
                 }
@@ -90,7 +97,7 @@ export class LifeSystem {
     killEnemy(world, enemy) {
 
         enemy.alive = false
-        world.enemies = world.enemies.filter(e => e !== enemy)
+        enemy.deathTimer = 1
 
     }
 

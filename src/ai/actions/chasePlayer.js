@@ -9,7 +9,7 @@ export class ChasePlayer extends BTNode {
         if (!world.player?.alive) return BT_FAILURE
 
         const player = world.player
-        
+
         const startX = enemy.tileX
         const startY = enemy.tileY
         const goalX  = player.tileX
@@ -22,6 +22,7 @@ export class ChasePlayer extends BTNode {
 
         enemy.currentDirection = dir
         enemy.desiredFacing    = dir
+        enemy.facing           = dir
 
         return BT_RUNNING
 

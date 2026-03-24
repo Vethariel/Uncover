@@ -1,14 +1,17 @@
+import { PLAYER_SPRITE, createSpriteState } from "../core/spriteConfig.js"
+
 export class Player {
 
   constructor(posX, posY, tileX, tileY, speed, size, facing) {
 
     this.posX = posX
     this.posY = posY
-    
+
     this.tileX = tileX
     this.tileY = tileY
 
     this.speed = speed
+    this.baseSpeed = speed
     this.size = size
 
     this.facing = facing
@@ -24,6 +27,8 @@ export class Player {
     this.alive = true
 
     this.invulnerableTimer = 0
+
+    this.sprite = createSpriteState(PLAYER_SPRITE)
 
   }
 

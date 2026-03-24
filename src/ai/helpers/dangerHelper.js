@@ -13,7 +13,7 @@ export function isDangerous(world, tileX, tileY) {
 
         const bx = bomb.tileX
         const by = bomb.tileY
-        const range = (bomb.bombRange)
+        const range = (bomb.range || 1)
 
         if (bx === tileX && Math.abs(by - tileY) <= range) {
             if (lineOfSight(world, bx, by, tileX, tileY)) return true
