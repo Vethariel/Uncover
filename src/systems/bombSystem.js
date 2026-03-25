@@ -83,7 +83,8 @@ export class BombSystem {
         // Es el último tile si alcanzó el rango o hay un destructible
         const isLast = (i === range)
         const isPowerUp = world.powerUps?.[`${tx},${ty}`]?.alive
-        const kind = this.explosionKind(dir, isLast, isPowerUp)
+        const isDestructible = tile === TILE_DESTRUCTIBLE
+        const kind = this.explosionKind(dir, isLast, isPowerUp, isDestructible, world.currentLevelIndex+1)
 
         // Si ya hay explosión en este tile, actualiza su kind a segmento
         const existing = this.getExplosion(world, tx, ty)
@@ -95,7 +96,7 @@ export class BombSystem {
           this.spawnExplosion(world, tx, ty, kind)
         }
 
-        if (tile === TILE_DESTRUCTIBLE) {
+        if (isDestructible) {
 
           grid.set(tx, ty, TILE_EXPLOSION)
           break
@@ -115,8 +116,9 @@ export class BombSystem {
 
   }
 
-  explosionKind(dir, isLast, isPowerUp) {
+  explosionKind(dir, isLast, isPowerUp, isDestructible, level) {
     if (isPowerUp) return 'powerUp'
+    if (isDestructible) return `tilelevel${level}`
     if (dir.x !== 0) return isLast ? (dir.x > 0 ? 'tipRight' : 'tipLeft') : 'horizontal'
     if (dir.y !== 0) return isLast ? (dir.y > 0 ? 'tipDown' : 'tipUp') : 'vertical'
     return 'center'

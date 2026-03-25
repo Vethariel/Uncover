@@ -46,6 +46,7 @@ export const EXPLOSION_SPRITE = {
         tipLeft:   { row: 6, frames: 8, fps: 12 },
         tipRight:  { row: 7, frames: 8, fps: 12 },
         powerUp:   { row: 8, frames: 5, fps: 12, loop: false },
+        tilelevel1: { row: 9, frames: 6, fps: 12, loop: false },
     }
 }
 

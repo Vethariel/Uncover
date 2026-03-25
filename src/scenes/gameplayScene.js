@@ -44,9 +44,7 @@ export class GameplayScene {
 
         for (const level of LEVELS.filter(l => l.type === "tmj")) {
             await this.assets.loadTMJ(level.data, `assets/tilemaps/${level.data}.tmj`)
-
-            const tmj = this.assets.getTMJ(level.data)
-            const tsRef = tmj.tilesets[0]               // { firstgid, source }
+             // { firstgid, source }
             const tsKey = level.data                     // ej. "level1"
             const tsPath = `assets/tilemaps/${tsKey}.tsj` // misma carpeta
 

@@ -64,6 +64,8 @@ export class LevelLoader {
     const gridLayer = tmj.layers.find(l => l.name === "GridMap" && l.type === "tilelayer")
     if (!gridLayer) throw new Error("LevelLoader.loadTMJ: falta la capa 'GridMap'")
 
+    const destructibleLayer = tmj.layers.find(l => l.name === "Destructible" && l.type === "tilelayer")
+
     for (let i = 0; i < gridLayer.data.length; i++) {
       const x = i % cols
       const y = Math.floor(i / cols)
@@ -83,7 +85,11 @@ export class LevelLoader {
         return data ? data[i] : 0
       })
 
-      grid.setVisual(x, y, layers)
+      const destructibleGid = destructibleLayer
+        ? (destructibleLayer.data[i] & 0x1FFFFFFF)
+        : 0
+
+      grid.setVisual(x, y, { layers, destructibleGid })
     }
 
     world.grid = grid
@@ -125,14 +131,28 @@ export class LevelLoader {
   }
 
   static _parseVisualConfig(tsj, tilesetKey) {
+
+    const firstGid = 1
+
+    // Mapa de gid → { frames: [gid,...], duration: ms }
+    // para cualquier tile que tenga animación definida en el TSJ
+    const tileAnims = {}
+    for (const tile of (tsj.tiles ?? [])) {
+      if (!tile.animation?.length) continue
+      const gid = firstGid + tile.id
+      tileAnims[gid] = {
+        frames: tile.animation.map(f => firstGid + f.tileid),
+        duration: tile.animation[0].duration
+      }
+    }
+
     return {
       tilesetKey,  // o la clave que uses
       tilesetCols: tsj.columns,              // 12
       tileSize: tsj.tilewidth,            // 16
       margin: tsj.margin ?? 0,
       spacing: tsj.spacing ?? 0,
-      deathFrames: 1,                        // configurable después
-      deathFirstGid: 0,
+      tileAnims
     }
   }
 

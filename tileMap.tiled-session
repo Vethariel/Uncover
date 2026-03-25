@@ -18,6 +18,7 @@
             }
         }
     },
+    "frame.defaultDuration": 200,
     "last.imagePath": "/home/vethariel",
     "map.height": 13,
     "map.lastUsedFormat": "json",

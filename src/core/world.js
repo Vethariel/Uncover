@@ -27,6 +27,8 @@ export class World {
     this.gameOver = false
     this.gameWon = false
     this.respawnTimer = 0
+
+    this.tileAnimTimer = 0
   }
 
   reset(assets) {
@@ -46,6 +48,8 @@ export class World {
 
     this.enemySpawns = []
     this.powerUps = {}
+
+    this.tileAnimTimer = 0
 
     const levels = LEVELS[this.currentLevelIndex]
     if (levels.type === "tmj") {

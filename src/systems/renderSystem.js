@@ -3,6 +3,7 @@ import { TILE_WALL, TILE_DESTRUCTIBLE, TILE_EXPLOSION, TILE_PASS } from "../conf
 export class RenderSystem {
 
     draw(world, assets, p) {
+        world.tileAnimTimer += p.deltaTime
         this.drawTiles(world, assets, p)
         this.drawEntities(world, assets, p)
     }
@@ -11,7 +12,6 @@ export class RenderSystem {
 
 
         const { grid, tileSize, levelVisualConfig } = world
-
         const sheet = levelVisualConfig ? assets.get(levelVisualConfig.tilesetKey) : null
 
         p.noStroke()
@@ -20,7 +20,7 @@ export class RenderSystem {
             for (let x = 0; x < grid.cols; x++) {
 
                 const tile = grid.tiles[y][x]
-                const layers = grid.getVisual(x, y)   // null en niveles legacy
+                const { layers, destructibleGid } = grid.getVisual(x, y) ?? { layers: [], destructibleGid: 0 }  // null en niveles legacy
                 const px = x * tileSize
                 const py = y * tileSize
 
@@ -29,20 +29,24 @@ export class RenderSystem {
                     // ── Render con tileset ──────────────────────────────────────────
 
                     // 1. Capas de fondo en orden (Background → Bridge)
+
                     for (const gid of layers) {
                         if (gid === 0) continue
                         this._drawGid(p, sheet, gid, levelVisualConfig, px, py)
                     }
 
-                    // 2. Si el tile está en estado EXPLOSION, superpone la animación de muerte.
-                    //    La explosión ya tiene su timer; nosotros solo necesitamos saber
-                    //    en qué frame estamos. Lo calculamos a partir del timer de la explosión
-                    //    que corresponde a esta celda.
-                    if (tile === TILE_EXPLOSION) {
-                        const frame = this._deathFrame(world, x, y)
-                        const gid = levelVisualConfig.deathFirstGid + frame
-                        this._drawGid(p, sheet, gid, levelVisualConfig, px, py)
+                    if (tile === TILE_DESTRUCTIBLE && destructibleGid > 0) {
+                        // El GID de la capa Destructible es el último en el array layers
+                        const anim = levelVisualConfig.tileAnims[destructibleGid]
+
+                        if (anim) {
+                            const frame = Math.floor(world.tileAnimTimer / anim.duration) % anim.frames.length
+                            this._drawGid(p, sheet, anim.frames[frame], levelVisualConfig, px, py)
+                        } else {
+                            this._drawGid(p, sheet, destructibleGid, levelVisualConfig, px, py)
+                        }
                     }
+
 
                 } else {
 
@@ -68,28 +72,6 @@ export class RenderSystem {
 
     }
 
-    // Calcula el frame de la animación de muerte para la celda (x, y).
-    // Busca la explosión de tipo "destruction" que ocupa ese tile y usa su timer.
-    _deathFrame(world, x, y) {
-
-        const cfg = world.levelVisualConfig
-        if (!cfg || cfg.deathFrames <= 1) return 0
-
-        // Busca la explosión de destrucción ligada a esta celda
-        const exp = world.explosions.find(
-            e => e.type === "destruction" && e.tileX === x && e.tileY === y
-        )
-
-        if (!exp) return 0
-
-        // Distribuye el timer restante en frames (timer va de maxTimer → 0)
-        const ratio = 1 - (exp.timer / exp.maxTimer)
-        return Math.min(
-            Math.floor(ratio * cfg.deathFrames),
-            cfg.deathFrames - 1
-        )
-
-    }
 
     // Dibuja un GID de Tiled (1-based) en la posición (px, py) del canvas.
     _drawGid(p, sheet, rawGid, cfg, px, py) {
