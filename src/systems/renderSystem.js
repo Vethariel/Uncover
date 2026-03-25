@@ -1,4 +1,4 @@
-import { TILE_WALL, TILE_DESTRUCTIBLE, TILE_EXPLOSION } from "../config/constants.js"
+import { TILE_WALL, TILE_DESTRUCTIBLE, TILE_EXPLOSION, TILE_PASS } from "../config/constants.js"
 
 export class RenderSystem {
 
