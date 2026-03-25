@@ -11,7 +11,8 @@ export class EnemyAISystem {
             // En EnemyAISystem.update():
             if (enemy.thinkTimer <= 0) {
                 enemy.thinkTimer = enemy.thinkInterval
-                enemy.behaviorTree?.tick(enemy, world, enemy.blackboard)            }
+                enemy.behaviorTree?.tick(enemy, world, enemy.blackboard, dt)            
+            }
 
         }
 

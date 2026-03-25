@@ -4,7 +4,7 @@ export const BT_RUNNING = 'RUNNING'
 
 // Nodo base
 export class BTNode {
-    tick(enemy, world, blackboard) {
+    tick(enemy, world, blackboard, dt) {
         return BT_FAILURE
     }
 }
@@ -16,9 +16,9 @@ export class Selector extends BTNode {
         this.children = children
     }
 
-    tick(enemy, world, blackboard) {
+    tick(enemy, world, blackboard, dt) {
         for (const child of this.children) {
-            const result = child.tick(enemy, world, blackboard)
+            const result = child.tick(enemy, world, blackboard, dt)
             if (result !== BT_FAILURE) return result
         }
         return BT_FAILURE
@@ -32,9 +32,9 @@ export class Sequence extends BTNode {
         this.children = children
     }
 
-    tick(enemy, world, blackboard) {
+    tick(enemy, world, blackboard, dt) {
         for (const child of this.children) {
-            const result = child.tick(enemy, world, blackboard)
+            const result = child.tick(enemy, world, blackboard, dt)
             if (result !== BT_SUCCESS) return result
         }
         return BT_SUCCESS
@@ -48,8 +48,8 @@ export class Inverter extends BTNode {
         this.child = child
     }
 
-    tick(enemy, world, blackboard) {
-        const result = this.child.tick(enemy, world, blackboard)
+    tick(enemy, world, blackboard, dt) {
+        const result = this.child.tick(enemy, world, blackboard, dt)
         if (result === BT_SUCCESS) return BT_FAILURE
         if (result === BT_FAILURE) return BT_SUCCESS
         return BT_RUNNING
@@ -65,12 +65,12 @@ export class Repeater extends BTNode {
         this.count = 0
     }
 
-    tick(enemy, world, blackboard) {
+    tick(enemy, world, blackboard, dt) {
         if (this.count >= this.times) {
             this.count = 0
             return BT_SUCCESS
         }
-        const result = this.child.tick(enemy, world, blackboard)
+        const result = this.child.tick(enemy, world, blackboard, dt)
         if (result === BT_SUCCESS) this.count++
         return BT_RUNNING
     }

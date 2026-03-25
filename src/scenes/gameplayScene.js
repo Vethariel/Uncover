@@ -38,13 +38,13 @@ export class GameplayScene {
 
     async preload(p) {
         await this.assets.loadSheet('player', 'assets/sprites/player.png', p)
-        await this.assets.loadSheet('enemy', 'assets/sprites/enemy.png', p)
+        await this.assets.loadSheet('dino', 'assets/sprites/dino.png', p)
         await this.assets.loadSheet('bombs', 'assets/sprites/bomb.png', p)
         await this.assets.loadSheet('powerUp', 'assets/sprites/powerUp.png', p)
 
         for (const level of LEVELS.filter(l => l.type === "tmj")) {
             await this.assets.loadTMJ(level.data, `assets/tilemaps/${level.data}.tmj`)
-             // { firstgid, source }
+            // { firstgid, source }
             const tsKey = level.data                     // ej. "level1"
             const tsPath = `assets/tilemaps/${tsKey}.tsj` // misma carpeta
 

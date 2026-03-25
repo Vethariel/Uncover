@@ -1,4 +1,4 @@
-import { PLAYER_SPRITE, createSpriteState } from "../core/spriteConfig.js"
+import { createSpriteState } from "../core/spriteConfig.js"
 
 export class Player {
 
@@ -28,7 +28,7 @@ export class Player {
 
     this.invulnerableTimer = 0
 
-    this.sprite = createSpriteState(PLAYER_SPRITE)
+    this.sprite = createSpriteState('player')
 
   }
 

@@ -90,4 +90,46 @@ export function bfsToSafeTile(world, startX, startY) {
 
 }
 
+// En bfsHelper.js
+export function bfsLeafNodes(world, startX, startY, minDist = 1, maxDist = Infinity) {
+
+    const queue   = [{ x: startX, y: startY, dist: 0 }]
+    const visited = new Set([`${startX},${startY}`])
+    const leaves  = []
+
+    while (queue.length > 0) {
+
+        const { x, y, dist } = queue.shift()
+
+        let isLeaf = true
+
+        for (const dir of ALL_DIRS) {
+
+            const nx  = x + VECTORS[dir].x
+            const ny  = y + VECTORS[dir].y
+            const key = `${nx},${ny}`
+
+            if (visited.has(key)) continue
+
+            if (!isWalkable(world, nx, ny)) continue
+
+            isLeaf = false
+
+            if (dist + 1 > maxDist) continue
+
+            visited.add(key)
+            queue.push({ x: nx, y: ny, dist: dist + 1 })
+
+        }
+
+        if (isLeaf && dist >= minDist) {
+            leaves.push({ x, y, dist })
+        }
+
+    }
+
+    return leaves
+
+}
+
 export { ALL_DIRS, VECTORS }

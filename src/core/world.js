@@ -4,6 +4,7 @@ import { Enemy } from "../entities/enemy.js"
 import { Player } from "../entities/player.js"
 import { Portal } from "../entities/portal.js"
 import { ENEMY_SIZE, ENEMY_SPEED, PLAYER_SIZE, PLAYER_SPEED, DIR_DOWN } from "../config/constants.js"
+import { ENEMY_TYPES } from "../config/enemyTypes.js"
 
 export class World {
 
@@ -75,13 +76,13 @@ export class World {
     this.player = player
 
     for (const spawn of this.enemySpawns) {
+      const config = ENEMY_TYPES[spawn.kind]
       const enemy = new Enemy(
         spawn.x * this.tileSize + (this.tileSize - ENEMY_SIZE) / 2,
         spawn.y * this.tileSize + (this.tileSize - ENEMY_SIZE) / 2,
         spawn.x,
         spawn.y,
-        ENEMY_SPEED,
-        ENEMY_SIZE
+        config
       )
 
       this.enemies.push(enemy)

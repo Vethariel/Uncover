@@ -1,4 +1,4 @@
-import { POWERUP_SPRITE, createSpriteState } from "../core/spriteConfig.js"
+import { createSpriteState } from "../core/spriteConfig.js"
 export class PowerUp {
 
     constructor(tileX, tileY, size, kind) {
@@ -14,7 +14,7 @@ export class PowerUp {
         this.type = "powerup"
         this.alive = false
 
-        this.sprite = createSpriteState(POWERUP_SPRITE)
+        this.sprite = createSpriteState('powerUp', kind)
         this.sprite.current = kind 
 
     }

@@ -3,7 +3,8 @@ import {
   DIR_DOWN,
   DIR_LEFT,
   DIR_RIGHT,
-  DIR_NONE
+  DIR_NONE,
+  TILE_PASS
 } from "../config/constants.js"
 
 import { Bomb } from "../entities/bomb.js"
@@ -45,6 +46,9 @@ export class InputSystem {
 
     const tileX = player.tileX
     const tileY = player.tileY
+
+    if (world.grid.get( tileX, tileY ) === TILE_PASS)
+      return
 
     if (this.bombExists(world, tileX, tileY))
       return

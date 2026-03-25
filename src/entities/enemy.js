@@ -1,11 +1,10 @@
 import { Blackboard }           from "../ai/blackboard.js"
-import { createBasicEnemyTree } from "../ai/trees/basicEnemy.js"
 import { DIR_DOWN } from "../config/constants.js"
-import { ENEMY_SPRITE, createSpriteState } from "../core/spriteConfig.js"
+import { createSpriteState } from "../core/spriteConfig.js"
 
 export class Enemy {
 
-    constructor(posX, posY, tileX, tileY, speed, size, tree = createBasicEnemyTree()) {
+    constructor(posX, posY, tileX, tileY, config) {
 
         this.posX = posX
         this.posY = posY
@@ -13,15 +12,15 @@ export class Enemy {
         this.tileX = tileX
         this.tileY = tileY
 
-        this.speed = speed
-        this.baseSpeed = speed
-        this.size = size
+        this.speed = config.speed
+        this.baseSpeed = config.speed
+        this.size = config.size
 
         this.facing = DIR_DOWN
         this.desiredFacing = DIR_DOWN
         this.currentDirection = DIR_DOWN
         
-        this.behaviorTree = tree
+        this.behaviorTree = config.tree()
         this.blackboard = new Blackboard()
 
         this.type = "enemy"
@@ -31,11 +30,11 @@ export class Enemy {
 
         // IA
         this.thinkTimer = 0
-        this.thinkInterval = 0.4  // recalcula dirección cada 400ms
+        this.thinkInterval = config.thinkInterval
         this.deathTimer = 0
 
 
-        this.sprite = createSpriteState(ENEMY_SPRITE)
+        this.sprite = createSpriteState(config.sprite)
 
     }
 

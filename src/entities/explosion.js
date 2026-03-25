@@ -1,4 +1,4 @@
-import { EXPLOSION_SPRITE, createSpriteState } from "../core/spriteConfig.js"
+import { createSpriteState } from "../core/spriteConfig.js"
 
 export class Explosion {
 
@@ -17,7 +17,7 @@ export class Explosion {
 
     this.type = "explosion"
 
-    this.sprite = createSpriteState(EXPLOSION_SPRITE)
+    this.sprite = createSpriteState('explosion', kind)
     this.sprite.current = kind
 
   }
