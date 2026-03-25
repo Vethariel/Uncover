@@ -1,3 +1,5 @@
+import { TILE_EMPTY } from "../config/constants.js"
+
 export class LifeSystem {
 
     update(world, dt) {
@@ -64,16 +66,11 @@ export class LifeSystem {
 
         if (player.invulnerableTimer > 0) player.invulnerableTimer -= dt
 
-        // Condición de victoria
-        const enemiesAlive = world.enemies.some(e => e.alive)
-
         // Activa portal cuando no quedan enemigos
-        if (!enemiesAlive && world.portal) {
-            world.portal.active = true
-        }
+        this.checkPortal(world)
 
         // Chequea si el jugador toca el portal activo
-        if (world.portal?.active && world.player.alive) {
+        if (world.portal?.visible && world.player.alive) {
             if (this.overlaps(world.player, world.portal)) {
                 world.gameWon = true
             }
@@ -125,6 +122,29 @@ export class LifeSystem {
             a.posY < b.posY + b.size &&
             a.posY + a.size > b.posY
         )
+    }
+
+
+    checkPortal(world) {
+
+        if (!world.portal) return
+        if (world.portal.visible) return
+
+        // Verifica que no queden enemigos vivos
+        const enemiesAlive = world.enemies.some(e => e.alive || e.dying)
+        if (enemiesAlive) return
+
+        // Verifica que el tile del portal esté libre (TILE_EMPTY)
+        const tile = world.grid.get(world.portal.tileX, world.portal.tileY)
+        if (tile !== TILE_EMPTY) return
+
+        // Activa el portal
+        world.portal.visible = true
+        world.portal.sprite.current = 'spawn'
+        world.portal.sprite.frame = 0
+        world.portal.sprite.timer = 0
+        world.portal.sprite.finished = false
+
     }
 
 }

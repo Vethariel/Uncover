@@ -22,6 +22,10 @@ export class AnimationSystem {
             if (powerUp.alive) this.updateEntity(powerUp, dt)
         }
 
+        if (world.portal?.visible) {
+            this.updateEntity(world.portal, dt)
+        }
+
     }
 
     updateEntity(entity, dt) {
@@ -36,7 +40,7 @@ export class AnimationSystem {
         let fps = anim.fps
         if (isWalkAnim) {
             fps = anim.fps * (entity.speed / entity.baseSpeed)
-        } 
+        }
 
         // Avanza el timer del frame
         entity.sprite.timer += dt
@@ -52,12 +56,20 @@ export class AnimationSystem {
                 entity.sprite.frame = 0
             } else {
                 entity.sprite.finished = true
+
+                if (entity.type === 'portal' && entity.sprite.current === 'spawn') {
+                    entity.sprite.current = 'idle'
+                    entity.sprite.frame = 0
+                    entity.sprite.timer = 0
+                    entity.sprite.finished = false
+                    entity.active = true  // ahora el jugador puede usarlo
+                }
             }
 
         }
 
         // Selecciona animación según estado
-        if (entity.facing !== undefined){
+        if (entity.facing !== undefined) {
             this.selectAnimation(entity)
 
         }

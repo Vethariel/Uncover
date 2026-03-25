@@ -147,11 +147,8 @@ export class RenderSystem {
         }
 
         // Portal
-        if (world.portal) {
-            p.fill(world.portal.active ? [120, 60, 200] : [60, 60, 60])
-            if (world.portal.active) p.fill(120, 60, 200)
-            else p.fill(60, 60, 60)
-            p.rect(world.portal.posX, world.portal.posY, world.portal.size, world.portal.size)
+        if (world.portal?.visible) {
+            this.drawSprite(p, assets, world.portal)
         }
 
         // Enemigos

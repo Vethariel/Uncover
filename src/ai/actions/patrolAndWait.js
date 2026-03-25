@@ -5,10 +5,11 @@ import { bfsToTarget, ALL_DIRS, VECTORS, bfsLeafNodes } from "../helpers/bfsHelp
 
 export class PatrolAndWait extends BTNode {
 
-    constructor(minDistance = 4, waitTime = 2) {
+    constructor(minDistance = 4, minWaitTime = 2, maxWaitTime = 2) {
         super()
         this.minDistance = minDistance
-        this.waitTime = waitTime
+        this.minWaitTime = minWaitTime
+        this.maxWaitTime = maxWaitTime
     }
 
     tick(enemy, world, blackboard, dt) {
@@ -31,7 +32,7 @@ export class PatrolAndWait extends BTNode {
         // Llegó al destino — empieza a esperar
         if (target && enemy.tileX === target.x && enemy.tileY === target.y) {
             blackboard.set('patrolWaiting', true)
-            blackboard.set('patrolWaitTimer', this.waitTime)
+            blackboard.set('patrolWaitTimer', this.minWaitTime + Math.random() * (this.maxWaitTime - this.minWaitTime))
             blackboard.clear('patrolTarget')
             //enemy.desiredFacing = DIR_NONE
             return BT_RUNNING

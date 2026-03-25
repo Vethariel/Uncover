@@ -19,10 +19,10 @@ export const TMJ_PASS = 3
 
 export const BG_LAYER_NAMES = ["Background", "Background2", "Ground", "Obstacles", "Bridge"]
 
-export const PLAYER_SPEED = 100
+export const PLAYER_SPEED = 50
 export const PLAYER_SIZE = 12
 export const PLAYER_LIVES = 3
-export const PLAYER_BOMB_RANGE = 3
+export const PLAYER_BOMB_RANGE = 1
 export const PLAYER_MAX_BOMBS = 1
 
 export const DIR_NONE = 0

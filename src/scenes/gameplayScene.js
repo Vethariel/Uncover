@@ -41,6 +41,7 @@ export class GameplayScene {
         await this.assets.loadSheet('dino', 'assets/sprites/dino.png', p)
         await this.assets.loadSheet('bombs', 'assets/sprites/bomb.png', p)
         await this.assets.loadSheet('powerUp', 'assets/sprites/powerUp.png', p)
+        await this.assets.loadSheet('portal', 'assets/sprites/portal.png', p)
 
         for (const level of LEVELS.filter(l => l.type === "tmj")) {
             await this.assets.loadTMJ(level.data, `assets/tilemaps/${level.data}.tmj`)

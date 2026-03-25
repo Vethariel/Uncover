@@ -1,3 +1,5 @@
+import { createSpriteState } from "../core/spriteConfig.js"
+
 export class Portal {
 
     constructor(tileX, tileY, size) {
@@ -10,8 +12,10 @@ export class Portal {
         this.posY = this.tileY * this.size
 
         this.type = "portal"
-        this.active = false
+        this.visible = false
         this.alive = true
+
+        this.sprite = createSpriteState('portal', 'spawn')
 
     }
 

@@ -5,11 +5,11 @@ import { createPatrolEnemyTree } from "../ai/trees/patrolEnemy.js"
 export const ENEMY_TYPES = {
 
     dino: {
-        speed:         15,
-        size:          14,
+        speed:         25,
+        size:          12,
         thinkInterval: 0.2,
         sprite:        'dino',
-        tree:          () => createPatrolEnemyTree(2,0.2),
+        tree:          () => createPatrolEnemyTree(2,0.1,0.2),
     },
 
     ghost: {
