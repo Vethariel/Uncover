@@ -21,6 +21,7 @@ export class World {
     this.powerUps = {}
     this.portal = null
 
+    this.levelVisualConfig = null
     this.currentLevelIndex = 0
     
     this.gameOver = false
@@ -28,7 +29,7 @@ export class World {
     this.respawnTimer = 0
   }
 
-  reset() {
+  reset(assets) {
 
     this.grid = null
     this.player = null
@@ -46,7 +47,14 @@ export class World {
     this.enemySpawns = []
     this.powerUps = {}
 
-    LevelLoader.load(this, LEVELS[this.currentLevelIndex])
+    const levels = LEVELS[this.currentLevelIndex]
+    if (levels.type === "tmj") {
+      const tmj = assets.getTMJ(levels.data)
+      const tsj = assets.getTSJ(levels.data)
+      LevelLoader.loadTMJ(this, tmj, tsj, levels.data)
+    } else {
+      LevelLoader.loadLegacy(this, levels.data)
+    }
 
     const spawn = this.playerSpawn
 

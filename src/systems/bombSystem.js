@@ -1,4 +1,4 @@
-import { TILE_WALL, TILE_DESTRUCTIBLE, TILE_EMPTY, TILE_EXPLOSION } from "../config/constants.js"
+import { TILE_WALL, TILE_DESTRUCTIBLE, TILE_EMPTY, TILE_EXPLOSION, TILE_PASS } from "../config/constants.js"
 
 import { Explosion } from "../entities/explosion.js"
 
@@ -77,7 +77,7 @@ export class BombSystem {
 
         const tile = grid.get(tx, ty)
 
-        if (tile === TILE_WALL || tile === TILE_EXPLOSION)
+        if (tile === TILE_WALL || tile === TILE_EXPLOSION || tile === TILE_PASS)
           break
 
         // Es el último tile si alcanzó el rango o hay un destructible

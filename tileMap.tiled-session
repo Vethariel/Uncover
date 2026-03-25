@@ -1,0 +1,42 @@
+{
+    "activeFile": "TileMap.tsx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "TileMap.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 8
+        },
+        "src/levels/level1.tmj": {
+            "scale": 2.15,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 146.97674418604652,
+                "y": 108.13953488372093
+            }
+        }
+    },
+    "last.imagePath": "/home/vethariel",
+    "map.height": 13,
+    "map.lastUsedFormat": "json",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 17,
+    "openFiles": [
+        "TileMap.tsx"
+    ],
+    "project": "tileMap.tiled-project",
+    "recentFiles": [
+        "src/levels/level1.tmj",
+        "TileMap.tsx"
+    ],
+    "tileset.lastUsedFormat": "json",
+    "tileset.margin": 1,
+    "tileset.spacing": 1,
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}

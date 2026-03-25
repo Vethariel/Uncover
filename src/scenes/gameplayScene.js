@@ -10,9 +10,9 @@ import { PowerUpSystem } from "../systems/powerUpSystem.js"
 import { AssetManager } from "../core/assetManager.js"
 import { AnimationSystem } from "../systems/animationSystem.js"
 
-import {
-    TILE_SIZE
-} from "../config/constants.js"
+import { LEVELS } from "../levels/levels.js"
+
+import { TILE_SIZE } from "../config/constants.js"
 
 export class GameplayScene {
 
@@ -41,6 +41,20 @@ export class GameplayScene {
         await this.assets.loadSheet('enemy', 'assets/sprites/enemy.png', p)
         await this.assets.loadSheet('bombs', 'assets/sprites/bomb.png', p)
         await this.assets.loadSheet('powerUp', 'assets/sprites/powerUp.png', p)
+
+        for (const level of LEVELS.filter(l => l.type === "tmj")) {
+            await this.assets.loadTMJ(level.data, `assets/tilemaps/${level.data}.tmj`)
+
+            const tmj = this.assets.getTMJ(level.data)
+            const tsRef = tmj.tilesets[0]               // { firstgid, source }
+            const tsKey = level.data                     // ej. "level1"
+            const tsPath = `assets/tilemaps/${tsKey}.tsj` // misma carpeta
+
+            await this.assets.loadTSJ(tsKey, tsPath)
+
+            const tsj = this.assets.getTSJ(tsKey)
+            await this.assets.loadSheet(tsKey, `assets/tilemaps/${tsj.image}`, p)
+        }
     }
 
     onEnter() {
@@ -49,7 +63,7 @@ export class GameplayScene {
         this.world = new World(TILE_SIZE)
         // reset carga el nivel, spawns de jugador, enemigos y portal
         this.world.currentLevelIndex = this.gameState.currentLevelIndex
-        this.world.reset()
+        this.world.reset(this.assets)
         this.gameState.applyToPlayer(this.world.player)
 
     }
@@ -67,7 +81,7 @@ export class GameplayScene {
         this.bombSystem.update(this.world, dt)
         this.lifeSystem.update(this.world, dt)
         this.powerUpSystem.update(this.world, dt)
-        this.animationSystem.update(this.world,dt)
+        this.animationSystem.update(this.world, dt)
 
         this._handleTransitions()
 

@@ -1,4 +1,6 @@
-import { level1 } from "./level1.js"
 import { level2 } from "./level2.js"
 
-export const LEVELS = [level1, level2]
+export const LEVELS = [
+  { type: "tmj",    data: "level1" },
+  { type: "legacy", data: level2    },
+]

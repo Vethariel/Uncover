@@ -1,6 +1,6 @@
 export const TILE_SIZE = 16
 export const TILES_X = 17
-export const TILES_Y = 12        // una fila menos para el juego
+export const TILES_Y = 13        // una fila menos para el juego
 export const HUD_HEIGHT = 16
 export const INTERNAL_WIDTH = TILE_SIZE * TILES_X       // 544
 export const INTERNAL_HEIGHT = TILE_SIZE * TILES_Y + HUD_HEIGHT  // 416
@@ -9,10 +9,18 @@ export const GAME_OFFSET_Y = HUD_HEIGHT  // los sistemas usan esto para posicion
 export const TILE_EMPTY = 0
 export const TILE_WALL = 1
 export const TILE_DESTRUCTIBLE = 2
-export const TILE_EXPLOSION = 3
+export const TILE_PASS = 3
+export const TILE_EXPLOSION = 4
+
+export const TMJ_EMPTY = 0
+export const TMJ_WALL = 1
+export const TMJ_DESTRUCTIBLE = 2
+export const TMJ_PASS = 3
+
+export const BG_LAYER_NAMES = ["Background", "Background2", "Ground", "Obstacles", "Bridge"]
 
 export const PLAYER_SPEED = 100
-export const PLAYER_SIZE = 14
+export const PLAYER_SIZE = 12
 export const PLAYER_LIVES = 3
 export const PLAYER_BOMB_RANGE = 3
 export const PLAYER_MAX_BOMBS = 1
