@@ -31,6 +31,9 @@ export class InputSystem {
     else if (inputHandler.isDown('w')) direction = DIR_UP   // W
     else if (inputHandler.isDown('s')) direction = DIR_DOWN    // S
 
+    if (direction != DIR_NONE)
+      world.events.push("playerWalk")
+
     player.facing = direction == DIR_NONE ? player.facing : direction
     player.desiredFacing = direction
 
@@ -58,6 +61,8 @@ export class InputSystem {
     world.bombs.push(bomb)
 
     player.activeBombs++
+
+    world.events.push("bombPlace")
   }
 
   bombExists(world, tileX, tileY) {

@@ -1,4 +1,4 @@
-export class TimeOutOverlay {
+export class TimeUpOverlay {
 
     constructor(gameState) {
         this.gameState = gameState
@@ -8,6 +8,7 @@ export class TimeOutOverlay {
 
     onEnter() {
         this.timer = this.duration
+        this.soundManager.playMusic('timeUp', false)
     }
 
     update(dt) {

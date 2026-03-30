@@ -12,6 +12,7 @@ export class BombSystem {
 
       if (bomb.timer <= 0) {
         this.explode(world, bomb)
+        world.events.push("explosion")
         continue
       }
 

@@ -6,6 +6,7 @@ export class GameOverScene {
 
     onEnter() {
         this.gameState.deleteSave()
+        this.soundManager.playMusic('gameOver', false)
     }
 
     update(dt) {

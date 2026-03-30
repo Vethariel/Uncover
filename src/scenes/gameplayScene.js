@@ -8,6 +8,7 @@ import { LifeSystem } from "../systems/lifeSystem.js"
 import { PowerUpSystem } from "../systems/powerUpSystem.js"
 import { ScoreSystem } from "../systems/scoreSystem.js"
 import { HudSystem } from "../systems/hudSystem.js"
+import { SoundSystem } from "../systems/soundSystem.js"
 
 import { AssetManager } from "../core/assetManager.js"
 import { AnimationSystem } from "../systems/animationSystem.js"
@@ -35,6 +36,7 @@ export class GameplayScene {
 
         this.assets = new AssetManager()
         this.animationSystem = new AnimationSystem()
+        this.soundSystem = new SoundSystem()
 
         this.world = null
 
@@ -69,6 +71,9 @@ export class GameplayScene {
         this.world.reset(this.assets)
         this.gameState.applyToPlayer(this.world.player)
 
+        const musicKey = this.world.levelVisualConfig.bgMusic
+        this.soundManager.playMusic(musicKey)
+
     }
     onExit() {
         this.gameState.syncFromPlayer(this.world.player)
@@ -86,6 +91,7 @@ export class GameplayScene {
         this.scoreSystem.update(this.world, dt, this.gameState)
         this.powerUpSystem.update(this.world, dt)
         this.animationSystem.update(this.world, dt)
+        this.soundSystem.update(this.world, this.soundManager, dt)
 
         this._handleTransitions()
 
@@ -114,10 +120,10 @@ export class GameplayScene {
             this.world.gameWon = false
         }
 
-        if (this.world.timeOut) {
+        if (this.world.timeUp) {
             this.gameState.syncFromPlayer(this.world.player)
-            this.manager.showOverlay('timeOut')
-            this.world.timeOut = false
+            this.manager.showOverlay('timeUp')
+            this.world.timeUp = false
             return
         }
 

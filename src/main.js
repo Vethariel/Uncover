@@ -1,4 +1,5 @@
 import { SceneManager } from "./core/sceneManager.js"
+import { SoundManager } from "./core/soundManager.js"
 import { GameState } from "./core/gameState.js"
 import { INTERNAL_WIDTH, INTERNAL_HEIGHT } from "./config/constants.js"
 import { InputHandler } from "./utils/inputHandler.js"
@@ -9,6 +10,7 @@ let sketch = (p) => {
   let buffer
   let inputHandler
   let gameState
+  let soundManager
 
   p.setup = async function () {
 
@@ -28,7 +30,10 @@ let sketch = (p) => {
     inputHandler = new InputHandler()
     inputHandler.setP(p)
     gameState = new GameState()
-    sceneManager = new SceneManager(gameState, inputHandler)
+    soundManager = new SoundManager()
+
+    await soundManager.load(p)
+    sceneManager = new SceneManager(gameState, inputHandler, soundManager)
 
     await sceneManager.scenes['gameplay'].preload(p)
 

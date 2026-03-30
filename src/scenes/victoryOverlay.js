@@ -5,11 +5,12 @@ export class VictoryOverlay {
     constructor(gameState) {
         this.gameState = gameState
         this.timer     = 0
-        this.duration  = 3
+        this.duration  = 4
     }
 
     onEnter() {
         this.timer = this.duration
+        this.soundManager.playMusic('victory', false)
     }
 
     update(dt, p) {

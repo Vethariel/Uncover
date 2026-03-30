@@ -152,7 +152,8 @@ export class LevelLoader {
       tileSize: tsj.tilewidth,            // 16
       margin: tsj.margin ?? 0,
       spacing: tsj.spacing ?? 0,
-      tileAnims
+      tileAnims,
+      bgMusic: tsj.bgMusic
     }
   }
 

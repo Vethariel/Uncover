@@ -3,17 +3,18 @@ import { LevelSelectScene } from "../scenes/levelSelectScene.js"
 import { GameplayScene } from "../scenes/gameplayScene.js"
 import { GameOverScene } from "../scenes/gameOverScene.js"
 //import { MinigameScene }    from "../scenes/minigameScene.js"
-import { TimeOutOverlay } from "../scenes/timeOutOverlay.js"
+import { TimeUpOverlay } from "../scenes/timeUpOverlay.js"
 import { PauseOverlay } from "../scenes/pauseOverlay.js"
 import { VictoryOverlay } from "../scenes/victoryOverlay.js"
 import { LevelIntroOverlay } from "../scenes/levelIntroOverlay.js"
 
 export class SceneManager {
 
-    constructor(gameState, inputHandler) {
+    constructor(gameState, inputHandler, soundManager) {
 
         this.gameState = gameState
         this.inputHandler = inputHandler
+        this.soundManager = soundManager
         this.current = null
         this.overlay = null
 
@@ -23,7 +24,7 @@ export class SceneManager {
             gameplay: new GameplayScene(gameState),
             gameOver: new GameOverScene(gameState),
             //minigame:    new MinigameScene(gameState),
-            timeOut: new TimeOutOverlay(gameState),
+            timeUp: new TimeUpOverlay(gameState),
             pause: new PauseOverlay(gameState),
             victory: new VictoryOverlay(gameState),
             levelIntro: new LevelIntroOverlay(gameState),
@@ -32,6 +33,7 @@ export class SceneManager {
         for (const scene of Object.values(this.scenes)) {
             scene.manager = this
             scene.inputHandler = inputHandler
+            scene.soundManager = soundManager
         }
 
     }
@@ -44,6 +46,9 @@ export class SceneManager {
     }
 
     showOverlay(name, data = {}) {
+        if ( name === "levelIntro") {
+            this.soundManager.pauseMusic()
+        }
         this.overlay = this.scenes[name]
         this.overlay?.onEnter?.(data)
     }
@@ -51,6 +56,11 @@ export class SceneManager {
     hideOverlay() {
         this.overlay?.onExit?.()
         this.overlay = null
+
+        // Reanuda si la escena actual es gameplay
+        if (this.current === this.scenes["gameplay"] && this.soundManager.pausedMusic) {
+            this.soundManager.resumeMusic()
+        }
     }
 
     update(dt, p) {

@@ -18,6 +18,7 @@ export class PowerUpSystem {
         if (!powerUp || !powerUp.alive) return
 
         this.apply(player, powerUp.kind)
+        world.events.push("powerUpPickup")
         powerUp.alive = false
         delete world.powerUps[key]
 

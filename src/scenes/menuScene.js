@@ -6,6 +6,7 @@ export class MenuScene {
 
     onEnter() {
         this.gameState.reset()
+        this.soundManager.playMusic('menu')
     }
 
     update(dt) {

@@ -3,11 +3,13 @@ export class LevelIntroOverlay {
     constructor(gameState) {
         this.gameState = gameState
         this.timer     = 0
-        this.duration  = 2.5
+        this.duration  = 3.7
     }
 
     onEnter() {
+        
         this.timer = this.duration
+        this.soundManager.playMusic('levelStart', false)
     }
 
     update(dt, p) {
