@@ -3,6 +3,7 @@ import { LevelSelectScene } from "../scenes/levelSelectScene.js"
 import { GameplayScene } from "../scenes/gameplayScene.js"
 import { GameOverScene } from "../scenes/gameOverScene.js"
 //import { MinigameScene }    from "../scenes/minigameScene.js"
+import { TimeOutOverlay } from "../scenes/timeOutOverlay.js"
 import { PauseOverlay } from "../scenes/pauseOverlay.js"
 import { VictoryOverlay } from "../scenes/victoryOverlay.js"
 import { LevelIntroOverlay } from "../scenes/levelIntroOverlay.js"
@@ -22,6 +23,7 @@ export class SceneManager {
             gameplay: new GameplayScene(gameState),
             gameOver: new GameOverScene(gameState),
             //minigame:    new MinigameScene(gameState),
+            timeOut: new TimeOutOverlay(gameState),
             pause: new PauseOverlay(gameState),
             victory: new VictoryOverlay(gameState),
             levelIntro: new LevelIntroOverlay(gameState),

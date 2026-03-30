@@ -16,6 +16,8 @@ export class Enemy {
         this.baseSpeed = config.speed
         this.size = config.size
 
+        this.score = config.score
+
         this.facing = DIR_DOWN
         this.desiredFacing = DIR_DOWN
         this.currentDirection = DIR_DOWN

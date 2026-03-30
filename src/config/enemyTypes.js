@@ -9,6 +9,7 @@ export const ENEMY_TYPES = {
         size:          12,
         thinkInterval: 0.2,
         sprite:        'dino',
+        score: 100,
         tree:          () => createPatrolEnemyTree(2,0.1,0.2),
     },
 

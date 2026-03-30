@@ -6,6 +6,8 @@ import { RenderSystem } from "../systems/renderSystem.js"
 import { BombSystem } from "../systems/bombSystem.js"
 import { LifeSystem } from "../systems/lifeSystem.js"
 import { PowerUpSystem } from "../systems/powerUpSystem.js"
+import { ScoreSystem } from "../systems/scoreSystem.js"
+import { HudSystem } from "../systems/hudSystem.js"
 
 import { AssetManager } from "../core/assetManager.js"
 import { AnimationSystem } from "../systems/animationSystem.js"
@@ -28,6 +30,8 @@ export class GameplayScene {
         this.bombSystem = new BombSystem()
         this.lifeSystem = new LifeSystem()
         this.powerUpSystem = new PowerUpSystem()
+        this.scoreSystem = new ScoreSystem()
+        this.hudSystem = new HudSystem()
 
         this.assets = new AssetManager()
         this.animationSystem = new AnimationSystem()
@@ -78,7 +82,8 @@ export class GameplayScene {
         this.enemyAISystem.update(this.world, dt)
         this.collisionSystem.update(this.world, dt)
         this.bombSystem.update(this.world, dt)
-        this.lifeSystem.update(this.world, dt)
+        this.lifeSystem.update(this.world, dt, this.scoreSystem, this.gameState)
+        this.scoreSystem.update(this.world, dt, this.gameState)
         this.powerUpSystem.update(this.world, dt)
         this.animationSystem.update(this.world, dt)
 
@@ -89,6 +94,7 @@ export class GameplayScene {
     render(buffer) {
         if (!this.world) return
         this.renderSystem.draw(this.world, this.assets, buffer)
+        this.hudSystem.draw(this.world, this.gameState, this.assets, buffer)
 
     }
 
@@ -106,6 +112,13 @@ export class GameplayScene {
             this.gameState.save()
             this.manager.showOverlay('victory')
             this.world.gameWon = false
+        }
+
+        if (this.world.timeOut) {
+            this.gameState.syncFromPlayer(this.world.player)
+            this.manager.showOverlay('timeOut')
+            this.world.timeOut = false
+            return
         }
 
     }

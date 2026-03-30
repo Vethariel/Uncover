@@ -1,4 +1,4 @@
-import { TILE_WALL, TILE_DESTRUCTIBLE, TILE_EXPLOSION, TILE_PASS } from "../config/constants.js"
+import { TILE_WALL, TILE_DESTRUCTIBLE, TILE_EXPLOSION, TILE_PASS, HUD_HEIGHT } from "../config/constants.js"
 
 export class RenderSystem {
 
@@ -32,7 +32,7 @@ export class RenderSystem {
 
                     for (const gid of layers) {
                         if (gid === 0) continue
-                        this._drawGid(p, sheet, gid, levelVisualConfig, px, py)
+                        this._drawGid(p, sheet, gid, levelVisualConfig, px, py + HUD_HEIGHT)
                     }
 
                     if (tile === TILE_DESTRUCTIBLE && destructibleGid > 0) {
@@ -41,9 +41,9 @@ export class RenderSystem {
 
                         if (anim) {
                             const frame = Math.floor(world.tileAnimTimer / anim.duration) % anim.frames.length
-                            this._drawGid(p, sheet, anim.frames[frame], levelVisualConfig, px, py)
+                            this._drawGid(p, sheet, anim.frames[frame], levelVisualConfig, px, py + HUD_HEIGHT)
                         } else {
-                            this._drawGid(p, sheet, destructibleGid, levelVisualConfig, px, py)
+                            this._drawGid(p, sheet, destructibleGid, levelVisualConfig, px, py + HUD_HEIGHT)
                         }
                     }
 
@@ -182,7 +182,7 @@ export class RenderSystem {
         // Centra el sprite sobre la hitbox
         const drawX = Math.floor(entity.posX + (entity.size - sprite.frameWidth) / 2)
         const drawY = Math.floor(entity.posY + (entity.size - sprite.frameHeight))  // alineado al piso
-        p.image(sheet, drawX, drawY, sprite.frameWidth, sprite.frameHeight,
+        p.image(sheet, drawX, drawY + HUD_HEIGHT, sprite.frameWidth, sprite.frameHeight,
             sx, sy, sprite.frameWidth, sprite.frameHeight)
 
     }

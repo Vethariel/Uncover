@@ -2,6 +2,7 @@ export const TILE_SIZE = 16
 export const TILES_X = 17
 export const TILES_Y = 13        // una fila menos para el juego
 export const HUD_HEIGHT = 16
+export const LEVEL_TIMER   = 180
 export const INTERNAL_WIDTH = TILE_SIZE * TILES_X       // 544
 export const INTERNAL_HEIGHT = TILE_SIZE * TILES_Y + HUD_HEIGHT  // 416
 export const GAME_OFFSET_Y = HUD_HEIGHT  // los sistemas usan esto para posicionar entidades
@@ -16,6 +17,8 @@ export const TMJ_EMPTY = 0
 export const TMJ_WALL = 1
 export const TMJ_DESTRUCTIBLE = 2
 export const TMJ_PASS = 3
+
+
 
 export const BG_LAYER_NAMES = ["Background", "Background2", "Ground", "Obstacles", "Bridge"]
 

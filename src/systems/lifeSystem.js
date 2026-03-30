@@ -2,7 +2,7 @@ import { TILE_EMPTY } from "../config/constants.js"
 
 export class LifeSystem {
 
-    update(world, dt) {
+    update(world, dt, scoreSystem,gameState) {
         const player = world.player
 
         if (!player.alive && !world.gameOver) {
@@ -35,7 +35,7 @@ export class LifeSystem {
                     if (entity.type === "player")
                         this.killPlayer(world)
                     else
-                        this.killEnemy(world, entity)
+                        this.killEnemy(world, entity, scoreSystem, gameState)
 
                 }
 
@@ -76,6 +76,19 @@ export class LifeSystem {
             }
         }
 
+        if (!world.gameOver && !world.gameWon) {
+            world.levelTimer -= dt
+
+            if (world.levelTimer <= 0) {
+                world.levelTimer = 0
+                world.timeOut = true
+                player.lives--
+                if (player.lives <= 0) {
+                    world.gameOver = true
+                }
+            }
+        }
+
     }
 
     killPlayer(world) {
@@ -91,10 +104,11 @@ export class LifeSystem {
 
     }
 
-    killEnemy(world, enemy) {
+    killEnemy(world, enemy, scoreSystem, gameState) {
 
         enemy.alive = false
         enemy.deathTimer = 1
+        scoreSystem.addScore(world, gameState, enemy)
 
     }
 

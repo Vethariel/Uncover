@@ -3,7 +3,7 @@ import { LevelLoader } from "../world/levelLoader.js"
 import { Enemy } from "../entities/enemy.js"
 import { Player } from "../entities/player.js"
 import { Portal } from "../entities/portal.js"
-import { ENEMY_SIZE, ENEMY_SPEED, PLAYER_SIZE, PLAYER_SPEED, DIR_DOWN } from "../config/constants.js"
+import { ENEMY_SIZE, ENEMY_SPEED, PLAYER_SIZE, PLAYER_SPEED, DIR_DOWN, LEVEL_TIMER } from "../config/constants.js"
 import { ENEMY_TYPES } from "../config/enemyTypes.js"
 
 export class World {
@@ -22,8 +22,13 @@ export class World {
     this.powerUps = {}
     this.portal = null
 
+    this.scorePopups = []
+
     this.levelVisualConfig = null
     this.currentLevelIndex = 0
+
+    this.levelTimer = LEVEL_TIMER
+    this.timeOut = false
     
     this.gameOver = false
     this.gameWon = false
@@ -41,6 +46,10 @@ export class World {
     this.playerSpawn = null
     this.portalSpawn = null
     this.bombs = []
+
+    this.levelTimer = LEVEL_TIMER
+    this.timeOut = false
+    this.scorePopups = []
 
     this.gameOver = false
     this.gameWon = false
