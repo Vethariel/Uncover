@@ -13,12 +13,13 @@ export const ENEMY_TYPES = {
         tree:          () => createPatrolEnemyTree(2,0.1,0.2),
     },
 
-    ghost: {
-        speed:         15,
-        size:          14,
-        thinkInterval: 0.2,
-        sprite:        'ghost',
-        tree:          () => createBasicEnemyTree(),
+    demon: {
+        speed:         50,
+        size:          12,
+        thinkInterval: 0.5,
+        sprite:        'demon',
+        score: 100,
+        tree:          () => createPatrolEnemyTree(2,0.01,0.2),
     },
 
     bomber: {

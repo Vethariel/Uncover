@@ -45,6 +45,7 @@ export class GameplayScene {
     async preload(p) {
         await this.assets.loadSheet('player', 'assets/sprites/player.png', p)
         await this.assets.loadSheet('dino', 'assets/sprites/dino.png', p)
+        await this.assets.loadSheet('demon', 'assets/sprites/demon.png', p)
         await this.assets.loadSheet('bombs', 'assets/sprites/bomb.png', p)
         await this.assets.loadSheet('powerUp', 'assets/sprites/powerUp.png', p)
         await this.assets.loadSheet('portal', 'assets/sprites/portal.png', p)

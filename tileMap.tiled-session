@@ -9,6 +9,22 @@
             "scaleInDock": 1,
             "scaleInEditor": 8
         },
+        "assets/tilemaps/level1.tmj": {
+            "scale": 2.305147058823529,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 134.48165869218502,
+                "y": 104.3317384370016
+            }
+        },
+        "assets/tilemaps/level2.tmj": {
+            "scale": 2.305147058823529,
+            "selectedLayer": 5,
+            "viewCenter": {
+                "x": 136.21690590111646,
+                "y": 104.3317384370016
+            }
+        },
         "src/levels/level1.tmj": {
             "scale": 2.15,
             "selectedLayer": 5,

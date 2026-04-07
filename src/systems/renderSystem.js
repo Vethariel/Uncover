@@ -184,6 +184,8 @@ export class RenderSystem {
         const drawY = Math.floor(entity.posY + (entity.size - sprite.frameHeight))  // alineado al piso
         p.image(sheet, drawX, drawY + HUD_HEIGHT, sprite.frameWidth, sprite.frameHeight,
             sx, sy, sprite.frameWidth, sprite.frameHeight)
+        
+        p.rect(entity.posX, entity.posY + HUD_HEIGHT, entity.size)
 
     }
 

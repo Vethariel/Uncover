@@ -26,6 +26,19 @@ export const SPRITE_CONFIGS = {
         }
     },
 
+    demon: {
+        sheet: 'demon',
+        frameWidth: 32,
+        frameHeight: 32,
+        animations: {
+            walkDown: { row: 0, frames: 8, fps: 8 },
+            walkLeft: { row: 1, frames: 8, fps: 8 },
+            walkRight: { row: 2, frames: 8, fps: 8 },
+            walkUp: { row: 3, frames: 8, fps: 8 },
+            death: { row: 4, frames: 4, fps: 8, loop: false },
+        }
+    },
+
     bomb: {
         sheet: 'bombs',
         frameWidth: 16,
@@ -49,6 +62,7 @@ export const SPRITE_CONFIGS = {
             tipRight: { row: 7, frames: 8, fps: 12 },
             powerUp: { row: 8, frames: 5, fps: 12, loop: false },
             tilelevel1: { row: 9, frames: 6, fps: 12, loop: false },
+            tilelevel2: { row: 10, frames: 6, fps: 12, loop: false },
         }
     },
 
