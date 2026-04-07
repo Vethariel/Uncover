@@ -151,14 +151,15 @@ export class RenderSystem {
             this.drawSprite(p, assets, world.portal)
         }
 
-        // Enemigos
-        for (const enemy of world.enemies) {
-            this.drawSprite(p, assets, enemy)
-        }
+        const entities = [...world.enemies,world.player]
 
-        // Jugador
-        if (world.player) {
-            this.drawSprite(p, assets, world.player)
+        entities.sort((a, b) => {
+            if (a.posY === b.posY) return a.posX - b.posX
+            return a.posY - b.posY
+        })
+
+        for (const entity of entities) {
+            this.drawSprite(p, assets, entity)
         }
 
     }
@@ -184,8 +185,6 @@ export class RenderSystem {
         const drawY = Math.floor(entity.posY + (entity.size - sprite.frameHeight))  // alineado al piso
         p.image(sheet, drawX, drawY + HUD_HEIGHT, sprite.frameWidth, sprite.frameHeight,
             sx, sy, sprite.frameWidth, sprite.frameHeight)
-        
-        p.rect(entity.posX, entity.posY + HUD_HEIGHT, entity.size)
 
     }
 
