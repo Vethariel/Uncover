@@ -7,37 +7,35 @@ export class HudSystem {
         const player = world.player
 
         // Fondo del HUD
-        buffer.fill(0)
-        buffer.noStroke()
-        buffer.rect(0, 0, buffer.width, HUD_HEIGHT)
+        const bannerHud = assets.get('hud')
+        buffer.image(bannerHud, 0, 0)
 
         // Vidas
-        this.drawNumber(buffer, assets, player.lives, 8, 8)
+        this.drawNumber(buffer, assets, player.lives, 25, 16, 10, 2, buffer.CENTER, buffer.CENTER)
 
         // Puntaje
-        this.drawNumber(buffer, assets, player.score, buffer.width / 2, 8)
+        this.drawNumber(buffer, assets, player.score, 74, 16, 11, 0, buffer.LEFT, buffer.CENTER)
 
         // Timer
         const minutes = Math.floor(world.levelTimer / 60)
         const seconds = Math.floor(world.levelTimer % 60)
         const timeStr = `${minutes}:${seconds.toString().padStart(2, '0')}`
-        buffer.fill(world.levelTimer < 30 ? [220, 60, 60] : [255])
-        buffer.textSize(8)
-        buffer.textAlign(buffer.RIGHT, buffer.TOP)
-        buffer.text(timeStr, buffer.width - 16, 8)
+        this.drawNumber(buffer, assets, timeStr, 130, 17, 14, 0, buffer.CENTER, buffer.CENTER)
 
         // Score popups
         this.drawPopups(world, assets, buffer)
 
     }
 
-    drawNumber(buffer, assets, value, x, y) {
+    drawNumber(buffer, assets, value, x, y, size = 8, strokeWeight = 0, alignX = buffer.LEFT, alignY = buffer.TOP) {
         const sheet  = assets.get('numbers')
         if (!sheet) {
             // Fallback texto si no hay sprite
             buffer.fill(255)
-            buffer.textSize(8)
-            buffer.textAlign(buffer.LEFT, buffer.TOP)
+            buffer.textSize(size)
+            buffer.stroke(0)
+            buffer.strokeWeight(strokeWeight)
+            buffer.textAlign(alignX, alignY)
             buffer.text(value, x, y)
             return
         }

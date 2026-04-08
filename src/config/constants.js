@@ -1,7 +1,7 @@
 export const TILE_SIZE = 16
 export const TILES_X = 17
 export const TILES_Y = 13        // una fila menos para el juego
-export const HUD_HEIGHT = 16
+export const HUD_HEIGHT = 24
 export const LEVEL_TIMER   = 180
 export const INTERNAL_WIDTH = TILE_SIZE * TILES_X       // 544
 export const INTERNAL_HEIGHT = TILE_SIZE * TILES_Y + HUD_HEIGHT  // 416
