@@ -18,7 +18,7 @@ export class Player {
     this.desiredFacing = facing
 
     this.type = "player"  
-
+    this.score = 0
     this.maxBombs = 1
     this.activeBombs = 0
     this.bombRange = 1

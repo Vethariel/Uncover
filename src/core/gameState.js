@@ -30,6 +30,7 @@ export class GameState {
         player.bombRange = this.bombRange
         player.maxBombs  = this.maxBombs
         player.lives     = this.lives
+        player.score     = this.score
     }
 
     // Sincroniza de vuelta desde el jugador al terminar un nivel
@@ -38,10 +39,7 @@ export class GameState {
         this.bombRange = player.bombRange
         this.maxBombs  = player.maxBombs
         this.lives     = player.lives
-    }
-
-    addScore(points) {
-        this.score += points
+        this.score     = player.score
     }
 
     nextLevel() {

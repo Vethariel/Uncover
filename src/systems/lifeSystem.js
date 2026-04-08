@@ -35,7 +35,7 @@ export class LifeSystem {
                     if (entity.type === "player")
                         this.killPlayer(world)
                     else
-                        this.killEnemy(world, entity, scoreSystem, gameState)
+                        this.killEnemy(world, entity, scoreSystem)
 
                 }
 
@@ -71,7 +71,7 @@ export class LifeSystem {
 
         // Chequea si el jugador toca el portal activo
         if (world.portal?.visible && world.player.alive) {
-            if (this.overlaps(world.player, world.portal)) {
+            if (this.inside(world.player, world.portal)) {
                 world.gameWon = true
             }
         }
@@ -106,11 +106,11 @@ export class LifeSystem {
 
     }
 
-    killEnemy(world, enemy, scoreSystem, gameState) {
+    killEnemy(world, enemy, scoreSystem) {
 
         enemy.alive = false
         enemy.deathTimer = 1
-        scoreSystem.addScore(world, gameState, enemy)
+        scoreSystem.addScore(world, enemy)
 
         world.events.push("enemyDeath")
 
@@ -141,6 +141,17 @@ export class LifeSystem {
             a.posY + a.size > b.posY
         )
     }
+
+    inside(a, b) {
+        return (
+            a.posX > b.posX &&
+            a.posX + a.size < b.posX + b.size &&
+            a.posY > b.posY &&
+            a.posY + a.size < b.posY + b.size
+        )
+    }
+
+
 
 
     checkPortal(world) {

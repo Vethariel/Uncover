@@ -4,16 +4,18 @@ export class HudSystem {
 
     draw(world, gameState, assets, buffer) {
 
+        const player = world.player
+
         // Fondo del HUD
         buffer.fill(0)
         buffer.noStroke()
         buffer.rect(0, 0, buffer.width, HUD_HEIGHT)
 
         // Vidas
-        this.drawNumber(buffer, assets, gameState.lives, 8, 8)
+        this.drawNumber(buffer, assets, player.lives, 8, 8)
 
         // Puntaje
-        this.drawNumber(buffer, assets, gameState.score, buffer.width / 2, 8)
+        this.drawNumber(buffer, assets, player.score, buffer.width / 2, 8)
 
         // Timer
         const minutes = Math.floor(world.levelTimer / 60)

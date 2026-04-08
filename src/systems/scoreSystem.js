@@ -16,13 +16,13 @@ export class ScoreSystem {
         })
     }
 
-    addScore(world, gameState, enemy) {
+    addScore(world, enemy) {
 
         const base    = enemy.scoreValue ?? 100
         const isCombo = this.comboTimer > 0
         const points  = isCombo ? base * 2 : base
 
-        gameState.addScore(points)
+        world.player.score += points
         this.comboTimer = this.comboWindow
 
         // Popup sobre el enemigo
