@@ -46,21 +46,15 @@ export class SceneManager {
     }
 
     showOverlay(name, data = {}) {
-        if ( name === "levelIntro") {
-            this.soundManager.pauseMusic()
-        }
+        this.soundManager.pauseMusic()
         this.overlay = this.scenes[name]
         this.overlay?.onEnter?.(data)
     }
 
     hideOverlay() {
+        this.soundManager.resumeMusic()
         this.overlay?.onExit?.()
         this.overlay = null
-
-        // Reanuda si la escena actual es gameplay
-        if (this.current === this.scenes["gameplay"] && this.soundManager.pausedMusic) {
-            this.soundManager.resumeMusic()
-        }
     }
 
     update(dt, p) {

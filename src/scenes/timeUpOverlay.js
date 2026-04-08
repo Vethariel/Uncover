@@ -8,7 +8,7 @@ export class TimeUpOverlay {
 
     onEnter() {
         this.timer = this.duration
-        this.soundManager.playMusic('timeUp', false)
+        this.soundManager.playOverlayMusic('timeUp', false)
     }
 
     update(dt) {

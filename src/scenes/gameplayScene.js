@@ -74,7 +74,6 @@ export class GameplayScene {
 
         const musicKey = this.world.levelVisualConfig.bgMusic
         this.soundManager.playMusic(musicKey)
-
     }
     onExit() {
         this.gameState.syncFromPlayer(this.world.player)

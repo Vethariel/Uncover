@@ -9,7 +9,7 @@ export class SoundManager {
         this.sfxVolume = 0.8
         this.musicVolume = 0.5
         this.currentMusic = null
-        this.pausedMusic = null
+        this.overlayMusic = null
     }
 
     // ── Carga ─────────────────────────────────────────────────────────────────
@@ -70,6 +70,15 @@ export class SoundManager {
         this.currentMusic = null
     }
 
+    playOverlayMusic(key, loop = true) {
+        const track = this.music[key]
+        if (!track) return
+        if (this.overlayMusic?.isPlaying()) this.overlayMusic.stop()
+        track.loop(loop)
+        track.play()
+        this.overlayMusic = track
+    }
+
     // ── Volumen ───────────────────────────────────────────────────────────────
 
     setSFXVolume(v) {
@@ -83,14 +92,12 @@ export class SoundManager {
     }
 
     pauseMusic() {
-        this.pausedMusic = this.currentMusic
         this.currentMusic.pause()
     }
 
     resumeMusic() {
-        this.currentMusic = this.pausedMusic
-        this.currentMusic.start()
-        this.pausedMusic = null
+        this.currentMusic.play()
+        this.currentMusic.paused = false
     }
 
 }

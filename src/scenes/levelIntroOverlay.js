@@ -9,7 +9,12 @@ export class LevelIntroOverlay {
     onEnter() {
         
         this.timer = this.duration
-        this.soundManager.playMusic('levelStart', false)
+        this.soundManager.playOverlayMusic('levelStart', false)
+        this.soundManager.pauseMusic()
+    }
+
+    onExit() {
+        this.soundManager.resumeMusic()
     }
 
     update(dt, p) {

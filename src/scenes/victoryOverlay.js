@@ -10,7 +10,7 @@ export class VictoryOverlay {
 
     onEnter() {
         this.timer = this.duration
-        this.soundManager.playMusic('victory', false)
+        this.soundManager.playOverlayMusic('victory', false)
     }
 
     update(dt, p) {
