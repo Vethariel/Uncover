@@ -11,7 +11,7 @@ export class HudSystem {
         buffer.image(bannerHud, 0, 0)
 
         // Vidas
-        this.drawNumber(buffer, assets, player.lives, 28, 13, 10, 2, 'center', 'center')
+        this.drawNumber(buffer, assets, Math.max(0,player.lives), 28, 13, 10, 2, 'center', 'center')
 
         // Puntaje
         this.drawNumber(buffer, assets, player.score, 74, 13, 11, 0, 'left', 'center')

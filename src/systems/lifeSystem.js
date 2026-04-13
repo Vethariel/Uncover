@@ -11,7 +11,7 @@ export class LifeSystem {
 
             if (world.respawnTimer <= 0) {
 
-                if (player.lives > 0)
+                if (player.lives >= 0)
                     this.respawn(world)
                 else
                     world.gameOver = true
@@ -83,7 +83,7 @@ export class LifeSystem {
                 world.levelTimer = 0
                 world.timeUp = true
                 player.lives--
-                if (player.lives <= 0) {
+                if (player.lives < 0) {
                     world.gameOver = true
                 }
             }

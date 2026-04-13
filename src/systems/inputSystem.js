@@ -26,10 +26,10 @@ export class InputSystem {
   handlePlayerInput(world, player, inputHandler) {
     let direction = DIR_NONE
 
-    if (inputHandler.isDown('a')) direction = DIR_LEFT   // A
-    else if (inputHandler.isDown('d')) direction = DIR_RIGHT    // D
-    else if (inputHandler.isDown('w')) direction = DIR_UP   // W
-    else if (inputHandler.isDown('s')) direction = DIR_DOWN    // S
+    if (inputHandler.isDown('a') || inputHandler.isDown('ArrowLeft')) direction = DIR_LEFT   // A
+    else if (inputHandler.isDown('d') || inputHandler.isDown('ArrowRight')) direction = DIR_RIGHT    // D
+    else if (inputHandler.isDown('w') || inputHandler.isDown('ArrowUp')) direction = DIR_UP   // W
+    else if (inputHandler.isDown('s') || inputHandler.isDown('ArrowDown')) direction = DIR_DOWN    // S
 
     if (direction != DIR_NONE)
       world.events.push("playerWalk")

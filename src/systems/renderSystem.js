@@ -183,6 +183,12 @@ export class RenderSystem {
         // Centra el sprite sobre la hitbox
         const drawX = Math.floor(entity.posX + (entity.size - sprite.frameWidth) / 2)
         const drawY = Math.floor(entity.posY + (entity.size - sprite.frameHeight))  // alineado al piso
+
+        // Parpadeo si tiene invulnerableTimer
+        if (entity.invulnerableTimer > 0) {
+            const visible = Math.floor(entity.invulnerableTimer * 20) % 2 === 0
+            if (!visible) return
+        }
         p.image(sheet, drawX, drawY + HUD_HEIGHT, sprite.frameWidth, sprite.frameHeight,
             sx, sy, sprite.frameWidth, sprite.frameHeight)
 

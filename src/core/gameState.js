@@ -1,3 +1,5 @@
+import { LEVELS } from "../levels/levels.js"
+
 import {
     PLAYER_SPEED,
     PLAYER_BOMB_RANGE,
@@ -45,7 +47,10 @@ export class GameState {
 
     nextLevel() {
         this.currentLevelIndex++
-        this.unlockedLevels = Math.max(this.unlockedLevels, this.currentLevelIndex + 1)
+        this.unlockedLevels = Math.min(
+            Math.max(this.unlockedLevels, this.currentLevelIndex + 1),
+            LEVELS.length
+        )
     }
 
     hasSave() {
