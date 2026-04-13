@@ -11,6 +11,7 @@ export class GameState {
 
     constructor() {
         this.reset()
+        this.unlockedLevels = 1
     }
 
     reset() {

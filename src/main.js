@@ -30,7 +30,9 @@ let sketch = (p) => {
     inputHandler = new InputHandler()
     inputHandler.setP(p)
     gameState = new GameState()
-    gameState.load()
+    if(gameState.hasSave()){
+      gameState.load()
+    }
     soundManager = new SoundManager()
 
     await soundManager.load(p)
