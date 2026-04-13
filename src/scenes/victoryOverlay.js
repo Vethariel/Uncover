@@ -10,6 +10,7 @@ export class VictoryOverlay {
 
     onEnter() {
         this.timer = this.duration
+        this.gameState.nextLevel()
         this.soundManager.playOverlayMusic('victory', false)
     }
 
@@ -33,7 +34,7 @@ export class VictoryOverlay {
         buffer.noStroke()
         buffer.rect(0, 0, buffer.width, buffer.height)
 
-        buffer.textAlign(buffer.CENTER, buffer.CENTER)
+        buffer.textAlign('center', 'center')
 
         buffer.fill(255, 220, 0)
         buffer.textSize(20)

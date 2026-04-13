@@ -21,7 +21,7 @@ export class PauseOverlay {
         buffer.noStroke()
         buffer.rect(0, 0, buffer.width, buffer.height)
 
-        buffer.textAlign(buffer.CENTER, buffer.CENTER)
+        buffer.textAlign('center', 'center')
 
         buffer.fill(255)
         buffer.textSize(20)

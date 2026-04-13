@@ -30,6 +30,7 @@ let sketch = (p) => {
     inputHandler = new InputHandler()
     inputHandler.setP(p)
     gameState = new GameState()
+    gameState.load()
     soundManager = new SoundManager()
 
     await soundManager.load(p)
@@ -37,7 +38,7 @@ let sketch = (p) => {
 
     await sceneManager.scenes['gameplay'].preload(p)
 
-    sceneManager.transition('menu')
+    sceneManager.transition('splash')
   }
 
   p.draw = function () {
@@ -67,6 +68,8 @@ let sketch = (p) => {
 
   p.keyPressed = () => inputHandler.onKeyPressed(p.key)
   p.keyReleased = () => inputHandler.onKeyReleased(p.key)
+
+  p.mousePressed = () => inputHandler.onMousePressed()
 
   p.windowResized = () => p.resizeCanvas(p.windowWidth, p.windowHeight)
 

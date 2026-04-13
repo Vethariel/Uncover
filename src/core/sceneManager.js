@@ -7,6 +7,7 @@ import { TimeUpOverlay } from "../scenes/timeUpOverlay.js"
 import { PauseOverlay } from "../scenes/pauseOverlay.js"
 import { VictoryOverlay } from "../scenes/victoryOverlay.js"
 import { LevelIntroOverlay } from "../scenes/levelIntroOverlay.js"
+import { SplashScene } from "../scenes/splashScene.js"
 
 export class SceneManager {
 
@@ -28,6 +29,7 @@ export class SceneManager {
             pause: new PauseOverlay(gameState),
             victory: new VictoryOverlay(gameState),
             levelIntro: new LevelIntroOverlay(gameState),
+            splash: new SplashScene(gameState),
         }
 
         for (const scene of Object.values(this.scenes)) {

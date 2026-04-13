@@ -44,6 +44,7 @@ export class GameState {
 
     nextLevel() {
         this.currentLevelIndex++
+        this.unlockedLevels = Math.max(this.unlockedLevels, this.currentLevelIndex + 1)
     }
 
     hasSave() {
@@ -58,6 +59,7 @@ export class GameState {
             speed:             this.speed,
             bombRange:         this.bombRange,
             maxBombs:          this.maxBombs,
+            unlockedLevels:    this.unlockedLevels
         }
         localStorage.setItem(SAVE_KEY, JSON.stringify(data))
     }
@@ -74,6 +76,7 @@ export class GameState {
             this.speed             = data.speed             ?? PLAYER_SPEED
             this.bombRange         = data.bombRange         ?? PLAYER_BOMB_RANGE
             this.maxBombs          = data.maxBombs          ?? PLAYER_MAX_BOMBS
+            this.unlockedLevels    = data.unlockedLevels    ?? 1
             return true
         } catch {
             return false

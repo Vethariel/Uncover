@@ -72,6 +72,7 @@ export class GameplayScene {
         this.world.currentLevelIndex = this.gameState.currentLevelIndex
         this.world.reset(this.assets)
         this.gameState.applyToPlayer(this.world.player)
+        this.gameState.save()
 
         const musicKey = this.world.levelVisualConfig.bgMusic
         this.soundManager.playMusic(musicKey)
@@ -115,7 +116,6 @@ export class GameplayScene {
 
         if (this.world.gameWon) {
             this.gameState.syncFromPlayer(this.world.player)
-            this.gameState.nextLevel()
             this.gameState.save()
             this.manager.showOverlay('victory')
             this.world.gameWon = false
